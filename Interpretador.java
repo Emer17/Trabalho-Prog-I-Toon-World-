@@ -57,7 +57,29 @@ class Interpretador{
 	
     public void interpreta(String l[]) {
         this.linhas = l;
-
+		
+		for(int i = 0; i < this.linhas.length; i++) {
+            if(this.linhas[i] != null) {
+				for(int x = 0; x < linhas[i].length(); x++ ){
+					if(linhas[i].charAt(x) == '-' || linhas[i].charAt(x) == '+' || linhas[i].charAt(x) == '/' || linhas[i].charAt(x) == '*'){
+						Operacao OP = new Operacao();
+						OP.setA(linhas[i].charAt(x-1) - 48);
+						OP.setB(linhas[i].charAt(x+1) - 48);
+						if (linhas[i].charAt(x) == '-'){
+							OP.Sub();
+						} else if (linhas[i].charAt(x) == '+') {
+							OP.Soma();
+						} else if (linhas[i].charAt(x) == '/') {
+							OP.Div();
+						} else if (linhas[i].charAt(x) == '*') {
+							OP.Mult();
+						}
+						System.out.println("Oh resultado da op eh: " + OP.Result);
+					}	
+				}
+            }
+        }
+		
         for(int i = 0; i < this.linhas.length; i++) {
             int x = 0;
             if(this.linhas[i] != null) {
