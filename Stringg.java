@@ -1,0 +1,4 @@
+class Stringg extends Variavel{
+	
+	
+}
