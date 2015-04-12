@@ -9,7 +9,10 @@ class Variavel{
 	public String getNome(){
 		return this.nome;
 	}
-	
+
+	public void Imp(){
+		System.out.println(this.nome);
+	}	
 	
 	
 }

@@ -16,7 +16,23 @@ class Interpretador{
 	//novo1 = new Inteiro();
 	//novo2 = new Double();
 	//novo3 = new Stringg();
-			
+	
+	
+	public void Corrige(String l[]){
+		this.linhas = l; //este bloco corrige o problema de "espaços duplicados"
+		linhas = l;
+		String Nlinha = new String();
+		for(int i = 0; i < this.linhas.length; i++){
+			if(this.linhas[i] != null){
+				linhas[i] = this.linhas[i].replaceAll("\\s+"," ");
+				//System.out.println("Linha reescrita:" + linhas[i]);
+			}
+		}
+	}
+	
+}
+	
+/*			
 	public Interpretador() {
 		vetor1 = new Inteiro [100];
 		vetor2 = new Double [100];
@@ -89,7 +105,7 @@ class Interpretador{
 					VerificarConteudo(linhas[i]);
 					break;
 					//System.out.println("entrou aqui2");
-					/*if(linhas[i].charAt(x) == '<' && linhas[i].charAt(x+1) == '-'){
+					//if(linhas[i].charAt(x) == '<' && linhas[i].charAt(x+1) == '-'){
 						//atribuição
 						System.out.println("entrou aqui3");
 						System.out.println(" " + linhas[i].length());
@@ -115,9 +131,10 @@ class Interpretador{
 					}else{
 						//é uma linha de "escopo"
 						x++;
-					}*/
+					}
 				}
 			}
 		}
 	}
 }
+*/
