@@ -8,27 +8,7 @@ import java.util.Scanner;
 import java.io.*;
 
 class Toon {
-    /*public static void main(String args[]) throws Exception {
-		File f; 
-		Scanner s;
-		Interpretador b;
-		b = new Interpretador();
-		String linhas[] = new String[2000];
-		f = new File(args[0]);//args[0] é o arquivo a ser interpretado
-		s = new Scanner(f); //scanner funcionara no arquivo
-		
-        while(s.hasNext()) { //copia todas as linhas do arquivo para linhas[i]
-            linhas[i] = s.nextLine();
-            i++;
-        }
-        
-        b.interpreta(linhas); //inicia interpretador
-        //String a = "e u+";
-        //Operacoes x;
-        //x = new Operacoes();
-        //x.resolve(a);
-	}
-}*/
+	
     public static void main(String args[]) throws Exception {
         File f;
         Scanner s;
@@ -52,6 +32,6 @@ class Toon {
 
         // Inicializamos o interpretador com o vetor de linhas. A partir
         // desse ponto, o objeto "b" irá interpretar o código lido do arquivo.
-        b.interpreta(linhas);
+        b.Corrige(linhas);
     }
 }
