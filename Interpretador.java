@@ -53,7 +53,14 @@ class Interpretador{
 		}
 	}
 	
-	
+	public double teste_k(double k){
+		if(k == 1){
+			k = 10;
+		} else {
+			k = k*10;
+		}
+		return k;
+	}
 	
     public void interpreta(String l[]) {
         this.linhas = l;
@@ -61,10 +68,31 @@ class Interpretador{
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
 				for(int x = 0; x < linhas[i].length(); x++ ){
-					if(linhas[i].charAt(x) == '-' || linhas[i].charAt(x) == '+' || linhas[i].charAt(x) == '/' || linhas[i].charAt(x) == '*'){
+					if(linhas[i].charAt(x) == '-' || linhas[i].charAt(x) == '+' || linhas[i].charAt(x) == '/' || linhas[i].charAt(x) == '*' || linhas[i].charAt(x) == '%'){
 						Operacao OP = new Operacao();
-						OP.setA(linhas[i].charAt(x-1) - 48);
-						OP.setB(linhas[i].charAt(x+1) - 48);
+						Boolean Percorre_W = true;
+						int w = x-1;
+						double k = 1;
+						while(linhas[i].charAt(w) != ' '){
+							OP.setA(linhas[i].charAt(w),k);
+							k = teste_k(k);
+							w--;
+						}
+						w = x+1;
+						k = 1;
+						while(linhas[i].charAt(w) != '?'){
+							w++;
+						}
+						w--;
+						while(Percorre_W){
+							if(linhas[i].charAt(w) == '-' || linhas[i].charAt(w) == '+' || linhas[i].charAt(w) == '/' || linhas[i].charAt(w) == '*' || linhas[i].charAt(w) == '%'){
+								Percorre_W = false;
+							} else {
+								OP.setB(linhas[i].charAt(w),k);
+								k = teste_k(k);
+								w--;
+							}
+						}
 						if (linhas[i].charAt(x) == '-'){
 							OP.Sub();
 						} else if (linhas[i].charAt(x) == '+') {
@@ -73,6 +101,8 @@ class Interpretador{
 							OP.Div();
 						} else if (linhas[i].charAt(x) == '*') {
 							OP.Mult();
+						} else if (linhas[i].charAt(x) == '%') {
+							OP.Mod();
 						}
 						System.out.println("Oh resultado da op eh: " + OP.Result);
 					}	

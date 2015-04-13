@@ -8,11 +8,15 @@ class Operacao{
 		this.B = 0;
 		this.Result = 0;
 	}
-	public void setA(double a){
-		this.A = a;
+	public void setA(char a, double k){
+		String a2 = ""+ a;
+		k = k * Double.valueOf(a2).doubleValue();
+		this.A =  this.A + k;
 	}
-	public void setB(double b){
-		this.B = b;
+	public void setB(char b, double k){
+		String b2 = ""+ b;
+		k = k * Double.valueOf(b2).doubleValue();
+		this.B =  this.B + k;
 	}
 	public void Soma(){
 		this.Result = this.A + this.B;
@@ -26,8 +30,7 @@ class Operacao{
 	public void Div(){
 		this.Result = this.A / this.B;
 	}
-
-
-
-
+	public void Mod(){
+		this.Result = this.A % this.B;
+	}
 }
