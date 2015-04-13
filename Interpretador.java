@@ -28,10 +28,7 @@ class Interpretador{
 				//System.out.println("Linha reescrita:" + linhas[i]);
 			}
 		}
-	}
-	
-}
-	
+	}		
 /*			
 	public Interpretador() {
 		vetor1 = new Inteiro [100];
@@ -67,7 +64,7 @@ class Interpretador{
 				}
 			}
 		}
-	}
+	}*/
 	
 	public double teste_k(double k){
 		if(k == 1){
@@ -126,7 +123,7 @@ class Interpretador{
             }
         }
 		
-        for(int i = 0; i < this.linhas.length; i++) {
+        /*for(int i = 0; i < this.linhas.length; i++) {
             int x = 0;
             if(this.linhas[i] != null) {
 				//System.out.println("entrou aqui1");
@@ -164,7 +161,7 @@ class Interpretador{
 					}
 				}
 			}
-		}
+		}*/
 	}
 }
-*/
+
