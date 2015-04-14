@@ -32,6 +32,6 @@ class Toon {
 
         // Inicializamos o interpretador com o vetor de linhas. A partir
         // desse ponto, o objeto "b" irá interpretar o código lido do arquivo.
-        b.Corrige(linhas);
+        b.corrige(linhas);
     }
 }

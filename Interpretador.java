@@ -6,16 +6,10 @@
 
 class Interpretador{
     private String linhas[];
-	public Inteiro [] vetor1;
-	public Double [] vetor2;
-	public Stringg [] vetor3;
-	
-	Inteiro novo1;
-	Double novo2;
-	Stringg novo3;
-	//novo1 = new Inteiro();
-	//novo2 = new Double();
-	//novo3 = new Stringg();
+	public Inteiro vetor1[] = new Inteiro[1000];
+	public Doublee vetor2[] = new Doublee[1000];
+	public Stringg vetor3[] = new Stringg[1000];
+
 	
 	
 	public void corrige(String l[]){
@@ -25,48 +19,56 @@ class Interpretador{
 		for(int i = 0; i < this.linhas.length; i++){
 			if(this.linhas[i] != null){
 				linhas[i] = this.linhas[i].replaceAll("\\s+"," ");
-				System.out.println("Linha reescrita:" + linhas[i]);
-				interpreta(linhas);
+				//System.out.println("Linha reescrita:" + linhas[i]);
+				criaVariavel(linhas[i]);
+				criaVariavel(linhas[i+1]);
 			}
 		}
-	}		
-/*			
-	public Interpretador() {
-		vetor1 = new Inteiro [100];
-		vetor2 = new Double [100];
-		vetor3 = new Stringg [50];
-	}
+	}	
 	
-	public void VerificarConteudo(String linha){
-		int i,j,k,x;
-		char [] nome;
+	public void criaVariavel(String linha){//falta "localizar" um local para chamar a funçao de criação de variavel
+		int i,j,k,x = 0;   // i percorre a linha, j percorre o vetor nome, 
+		char [] nome;    //k percorre a partir do tipo primitivo e x percorre guardando o valor
+		double m;
 		nome = new char [20];
 		char [] copia = linha.toCharArray();
-		String teste;
+		String nome2,valor2;
+		char [] valor;
+		valor = new char [10];
 		if(linha.contains("main")){
 			return;
-		}else if(linha.contains("int")){
-			if(linha.contains("<-")){
-				//fazer
-			}else{
+		}else if(linha.contains("int") || linha.contains("double") || linha.contains("string")){
 				for(i=0;i<linha.length();i++){
-					if(linha.charAt(i) ==' ' && linha.charAt(i-1) == 't'){
+					if(linha.charAt(i) ==' ' && linha.charAt(i-1) == 't' || linha.charAt(i) ==' ' && linha.charAt(i-1) == 'e' || linha.charAt(i) ==' ' && linha.charAt(i-1) == 'g'){
 						for(k=i,j=0;j<(linha.length()-i);k++){
 							if(copia[k]==' ' || copia[k]== '?'){
 								continue;
+							}else if(copia[k]=='<'){
+								k = k+2;
+								if(copia[k]==' '){
+									k++;
+								}
+								while(copia[k] != ' '){
+									valor[x] = copia[k];
+									k++;
+									x++;
+									valor2 = String.copyValueOf(valor);
+									m = 1 * Double.valueOf(valor2).doubleValue();
+									//System.out.println(m);
+								}
 							}else{
 								nome[j] = copia[k];
 								j++;
-								//teste = copia.toString();
-								System.out.println(nome);
+								nome2 = String.copyValueOf(nome);
+								//System.out.println(nome2);
 							}
 						}
 					}
 				}
 			}
 		}
-	}*/
-	
+
+		
 	public double teste_k(double k){
 		if(k == 1){
 			k = 10;
