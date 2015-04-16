@@ -1,19 +1,20 @@
-class Stringg extends Variavel{
-	private String conteudo;
+class Stringg {
+	public String conteudo;
+	public String nome;
+	public boolean Vazio;
 	
 	public Stringg(){
-		this.conteudo = " ";
-	}	
-	
-	public void setConteudo(String x){
-		this.conteudo = x;
+		this.nome = "";
+		this.conteudo = "";
+		this.Vazio = true;
 	}
 	
-	public String getConteudo(){
-		return this.conteudo;
+	public void ConcatenarNome(char N){
+		this.nome += "" + N;
 	}
 	
-	public void ImpConteudo(){
-		System.out.println(this.conteudo);
+	public void ConcatenarConteudo(char C){
+		this.conteudo += "" + C;
 	}
+	
 }

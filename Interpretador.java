@@ -4,89 +4,53 @@
  * Versão: 1.0
  * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 
-class Interpretador{
+class Interpretador {
     private String linhas[];
-	public Inteiro vetor1[] = new Inteiro[1000];
-	public Doublee vetor2[] = new Doublee[1000];
-	public Stringg vetor3[] = new Stringg[1000];
 
-	public void corrige(String l[]){
-		this.linhas = l; //este bloco corrige o problema de "espaços duplicados"
-		linhas = l;
-		String Nlinha = new String();
-		for(int i = 0; i < this.linhas.length; i++){
-			if(this.linhas[i] != null){
-				linhas[i] = this.linhas[i].replaceAll("\\s+"," ");
-				//System.out.println("Linha reescrita:" + linhas[i]);
-				obtemInfo(linhas[i]);
-			}
-		}
-	}	
-	
-	public void obtemInfo(String linha){
-		int i,j = 0,x = 0;   // i percorre a linha, j percorre o vetor nome, x percorre guardando o valor
-		int inteiro;
-		char [] nome;
-		nome = new char [20];
-		char [] valor;
-		valor = new char [10];
-		String nome2,valor2;
-		if(linha.contains("main")){
-			return;
-		}else if(linha.contains("int")){
-				for(i=0;i<linha.length();i++){
-					if(linha.charAt(i) ==' ' && linha.charAt(i-1) == 't'){
-							i++;
-							while(linha.charAt(i) != ' '){
-								nome[j] = linha.charAt(i);
-								i++;
-								j++;
-							}
-							if(linha.charAt(i) == ' ' || linha.charAt(i) == '?'){
-								i++;
-							}
-							if(linha.charAt(i) =='<'){
-								i = i+2;
-								if(linha.charAt(i) ==' '){
-									i++;
-								}
-								if(linha.charAt(i) != ' ' && linha.charAt(i) != '?'){
-									while(linha.charAt(i) != ' ' && linha.charAt(i) != '?'){
-										valor[x] = linha.charAt(i);
-										x++;
-										i++;
-									}
-									nome2 = String.copyValueOf(nome);
-									//System.out.println(nome2);
-									valor2 = String.copyValueOf(valor);
-									inteiro = Integer.parseInt(valor2);
-									//System.out.println(inteiro);
-									//aqui vc chama a função de adicionar o elemento no vetor
-								}
-							}
-						}
-					}
-				}
-			}
-			
-		}
-	
     public void interpreta(String l[]) {
         this.linhas = l;
+		Operacao OP = new Operacao();
+		Variavel V = new Variavel();
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
-				boolean Token_Especial = false;
-				for(int x = 0; x < linhas[i].length(); x++ ){
-					Operacao OP = new Operacao();
-					if(OP.TokenEspecial(linhas[i].charAt(x))){
-						Token_Especial = true;
-					}
-					if(OP.testeExpressao(linhas[i].charAt(x))){
-						char Token = linhas[i].charAt(x);
-						OP.Exp(linhas[i], Token, Token_Especial);
-						OP.Imp(Token);
-					}
-				}
+				V.CriaVariavel(linhas[i]);
+				OP.Expressoes(linhas[i]);
+			}
+		}
+		System.out.println("=================================");
+		System.out.println("        Vetor de String");
+		System.out.println("=================================");
+		for(int w = 0; w < V.vString.length; w++){
+			if (V.vString[w].Vazio){
+				
+			} else {
+				System.out.println( w + " <- Posicao ");
+				System.out.println("             ->> Nome : " + V.vString[w].nome);
+				System.out.println("             ->> Conteudo : " + V.vString[w].conteudo);
+			}
+		}
+		System.out.println("=================================");
+		System.out.println("        Vetor de Inteiros");
+		System.out.println("=================================");
+		for(int a = 0; a < V.vInteiro.length; a++){
+			if (V.vInteiro[a].Vazio){
+				
+			} else {
+				System.out.println( a + " <- Posicao ");
+				System.out.println("             ->> Nome : " + V.vInteiro[a].nome);
+				System.out.println("             ->> Valor : " + V.vInteiro[a].valor);
+			}
+		}
+		System.out.println("=================================");
+		System.out.println("        Vetor de Double");
+		System.out.println("=================================");
+		for(int y = 0; y < V.vDouble.length; y++){
+			if (V.vDouble[y].Vazio){
+				
+			} else {
+				System.out.println( y + " <- Posicao ");
+				System.out.println("             ->> Nome : " + V.vDouble[y].nome);
+				System.out.println("             ->> Valor : " + V.vDouble[y].valor);
 			}
 		}
         /*for(int i = 0; i < this.linhas.length; i++) {

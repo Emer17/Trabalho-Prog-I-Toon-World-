@@ -1,16 +1,44 @@
-class Doublee extends Variavel{
-	private double valor;
-	
-	public void setValor(double valor){
-		this.valor = valor;
-	}
-	
-	public double getValor(){
-		return this.valor;
-	}
+class Doublee {
+	public double valor;
+	public String nome;
+	public boolean Vazio;
 	
 	public Doublee(){
-		this.valor = 0.0;
+		this.nome = "";
+		this.valor = 0;
+		this.Vazio = true;
 	}
 	
+	public void ConcatenarNome(char N){
+		this.nome += "" + N;
+	}
+	
+	public void TransformaValor(String Valor){
+		this.valor =  Double.valueOf(Valor).doubleValue();
+	}
+	
+	public void SetVariavel_Double(String l, int x){
+		Operacao Exp = new Operacao();
+		String Valor = "";
+		while(l.charAt(x) != '<'){
+			if(l.charAt(x) != ' ') ConcatenarNome(l.charAt(x));
+			else ConcatenarNome(' ');
+			x++;
+		}
+		while(l.charAt(x) != ')'){
+			x++;
+		}
+		x++;
+		if(Exp.testeExpressao(l)){
+			Exp.Expressoes(l);
+			this.valor = Exp.Result;
+		} else {
+			while(l.charAt(x) != '?'){
+				if(l.charAt(x) != ' ') Valor += l.charAt(x);
+				x++;
+			}
+			TransformaValor(Valor);
+		}
+		this.Vazio = false;
+	}
 }
