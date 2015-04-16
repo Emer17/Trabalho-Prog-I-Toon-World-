@@ -25,6 +25,7 @@ class Interpretador{
 	
 	public void obtemInfo(String linha){
 		int i,j = 0,x = 0;   // i percorre a linha, j percorre o vetor nome, x percorre guardando o valor
+		int inteiro;
 		char [] nome;
 		nome = new char [20];
 		char [] valor;
@@ -58,7 +59,9 @@ class Interpretador{
 									nome2 = String.copyValueOf(nome);
 									//System.out.println(nome2);
 									valor2 = String.copyValueOf(valor);
-									//System.out.println(valor2);
+									inteiro = Integer.parseInt(valor2);
+									//System.out.println(inteiro);
+									//aqui vc chama a função de adicionar o elemento no vetor
 								}
 							}
 						}
