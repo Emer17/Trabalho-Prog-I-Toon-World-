@@ -22,6 +22,7 @@ class Doublee {
 		String Valor = "";
 		while(l.charAt(x) != '<'){
 			if(l.charAt(x) != ' ') ConcatenarNome(l.charAt(x));
+			else if (l.charAt(x) == ' ' && (l.charAt(x+1) == ' ' || l.charAt(x+1) == '<')) ;
 			else ConcatenarNome(' ');
 			x++;
 		}

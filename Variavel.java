@@ -23,7 +23,44 @@ class Variavel{
 			CriaVariavel_Inteiro(l);
 		} else if(l.contains("Double")){
 			CriaVariavel_Double(l);
+		} else if(l.contains("<)")){
+			Atribuicao(l);
 		}
+	}
+	
+	public void Atribuicao(String l){
+		String Nome = "";
+		int w = 0;
+		while(l.charAt(w) != '<'){
+			if(l.charAt(w) != ' ') Nome += l.charAt(w);
+			else if (l.charAt(w) == ' ' && (l.charAt(w+1) == ' ' || l.charAt(w+1) == '<')) ;
+			else Nome += " ";
+			w++;
+		}
+		if (Pesquisar_Double(Nome) != 0) System.out.println(Pesquisar_Double(Nome));
+		if (Pesquisar_Inteiro(Nome) != 0) System.out.println(Pesquisar_Inteiro(Nome));
+	}
+	
+	public double Pesquisar_Double(String Nome){
+		double a = 0;
+		for(int w =0; w < this.vDouble.length; w++){
+			if(this.vDouble[w].nome.equals(Nome)){
+				a = this.vDouble[w].valor;
+				return a;
+			}
+		}
+		return 0;
+	}
+	
+	public int Pesquisar_Inteiro(String Nome){
+		int a = 0;
+		for(int w =0; w < this.vInteiro.length; w++){
+			if(this.vInteiro[w].nome.equals(Nome)){
+				a = this.vInteiro[w].valor;
+				return a;
+			}
+		}
+		return 0;
 	}
 	
 	public void CriaVariavel_Double(String l){
