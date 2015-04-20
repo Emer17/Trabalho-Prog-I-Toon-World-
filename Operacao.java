@@ -2,6 +2,7 @@ class Operacao{
 	private double A;
 	private double B;
 	public double Result;
+	private boolean TokenNegativo = false;
 	
 	public Operacao(){
 		this.A = 0;
@@ -9,12 +10,8 @@ class Operacao{
 		this.Result = 0;
 	}
 	
-	public void Imp(){
-		System.out.println("Oh resultado eh: " + this.Result);
-	}
-	
-	public void setA(String C, boolean T_E){
-		if (T_E) this.A = Double.valueOf(C).doubleValue()*(-1);
+	public void setA(String C){
+		if (this.TokenNegativo) this.A = Double.valueOf(C).doubleValue()*(-1);
 		else this.A = Double.valueOf(C).doubleValue();
 	}
 	
@@ -67,23 +64,22 @@ class Operacao{
 		return T;
 	}
 	
-	public boolean TokenEspecial(String l){
-		boolean T = true;
+	public void TokenEspecial(String l){
 		for(int w = 0; w < l.length(); w++) {
-			if(l.charAt(w) == '@'){ 
-				T = true;
+			if(l.charAt(w) == '!'){ 
+				this.TokenNegativo = true;
+				break;
 			} else {
-				T = false;
+				this.TokenNegativo = false;
 			}
 		}
-		return T;
 	}
 	
-	public void Expressoes(String l){
+	public void Expressoes(String l, Variavel V){
 		if(testeExpressao(l)){
 			int x;
-			boolean TokenEspecial = false;
-			if(TokenEspecial(l)) TokenEspecial = true;
+			this.TokenNegativo = false;
+			TokenEspecial(l);
 			for(x = 0; x < l.length(); x++ ){
 				if(l.charAt(x) == '+' || l.charAt(x) == '-' || l.charAt(x) == '*' || l.charAt(x) == '/' || l.charAt(x) == '%'){
 					break;
@@ -95,11 +91,13 @@ class Operacao{
 			String Concatenar = "";
 			while(l.charAt(w) != ' '){
 				if(l.charAt(w) == ')') break;
+				if(l.charAt(w) == '!') break;
 				Concatenar += l.charAt(w);
 				w--;
 			}
 			Concatenar = Inverter(Concatenar);
-			setA(Concatenar,TokenEspecial);
+			Concatenar = V.PESQ(Concatenar);
+			setA(Concatenar);
 			Concatenar = "";
 			w = x + 1;
 			while(l.charAt(w) == ' ' ) w++;// Percore ate achar a Variavel B. Exemplo: 8 +      9?
@@ -108,6 +106,7 @@ class Operacao{
 				Concatenar += l.charAt(w);
 				w++;
 			}
+			Concatenar = V.PESQ(Concatenar);
 			setB(Concatenar);
 			if (Token == '-'){
 				Sub();
@@ -120,7 +119,6 @@ class Operacao{
 			} else if (Token == '%') {
 				Mod();
 			}
-			Imp();
 		}
 	}
 	

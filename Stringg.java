@@ -9,12 +9,11 @@ class Stringg {
 		this.Vazio = true;
 	}
 	
-	public void ConcatenarNome(char N){
-		this.nome += "" + N;
+	public void ConcatenarNome(String N){
+		this.nome = N;
 	}
 	
 	public void ConcatenarConteudo(char C){
 		this.conteudo += "" + C;
 	}
-	
 }
