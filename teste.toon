@@ -1,11 +1,7 @@
-
-Double JE<) 19+1?
-
-Double J<) JE   -    10?
-
-JE<)   40?
-
-JE <) J+ JE?
-String kie <) "Ola"?
-
-ler(#J)?
+Double A<) 19+1?
+Double B<) 0?
+if{A<<B}[
+	printlb{"oi"}?
+]else[
+	printlb{"voce"}?
+]
