@@ -17,21 +17,29 @@ class Variavel{
 		}
 	}
 	
-	public void CriaVariavel(String l, Variavel V){
-		if(l.contains("String")){
-			CriaVariavel_String(l);
-		} else if(l.contains("Int")){
-			CriaVariavel_Inteiro(l, V);
-		} else if(l.contains("Double")){
-			CriaVariavel_Double(l, V);
-		} else if(l.contains("ler")){
+	public void ModificacaoNaVariavel(String l, Variavel V){
+		if(l.contains("ler")){
 			ler_valor(l, V);
+		} else if(l.contains("...") || l.contains(",,,")){
+			MaisMais_E_MenosMenos(l, V);
 		} else if(l.contains("<)")){
 			Atribuicao(l, V);
 		}
 	}
 	
-	public void ler_valor(String l, Variavel V){
+	public void CriaVariavel(String l, Variavel V){
+		if(l.contains("String")){
+			CriaVariavel_String(l);
+		} else if(l.contains("Int")){
+			if (Pesquisar(Pegar_Nome(l),Pegar_Valor(l,V)));//Caso crie um variavel com o mesmo nome, dai vai subscrever a antiga.
+			else CriaVariavel_Inteiro(l, V);
+		} else if(l.contains("Double")){
+			if (Pesquisar(Pegar_Nome(l),Pegar_Valor(l,V)));//Caso crie um variavel com o mesmo nome, dai vai subscrever a antiga.
+			else CriaVariavel_Double(l, V);
+		}
+	}
+	
+	public void ler_valor(String l, Variavel V){//ler(#NomeVariavel)
 		int w=0;
 		String Nome = "";
 		while(l.charAt(w) != '#') w++;
@@ -42,6 +50,7 @@ class Variavel{
 			else Nome += " ";
 			w++;
 		}
+		System.out.println("Lendo para variavel ( " + Nome + " ) :");
 		Scanner scanner = new Scanner(System.in);
 		double valor = scanner.nextDouble();
 		Pesquisar(Nome,String.valueOf(valor));
@@ -51,46 +60,61 @@ class Variavel{
 		String Nome = "";
 		int x = 0;
 		while(l.charAt(x) != '<'){
-			if(l.charAt(x) != ' ') Nome += l.charAt(x);
-			else if (l.charAt(x) == ' ' && (l.charAt(x+1) == ' ' || l.charAt(x+1) == '<'));
-			else Nome += " ";
+			if(l.charAt(x) != ' ' && l.charAt(x) != 9) Nome += l.charAt(x);
 			x++;
 		}
+		System.out.println("Nome : ->>>" + Nome);
 		Pesquisar(Nome,Pegar_Valor(l,V));
 	}
+	
+	public void MaisMais_E_MenosMenos(String l, Variavel V){
+		String Nome = "";
+		int x = 0;
+		while(l.charAt(x) != '.'){
+			if(l.charAt(x) == ',') break;
+			if(l.charAt(x) != ' ' && l.charAt(x) != 9) Nome += l.charAt(x);
+			x++;
+		}
+		if(l.contains("...")) Pesquisar(Nome,PESQ(Nome,1));
+		else Pesquisar(Nome,PESQ(Nome,-1));
+	}
 		
-	public String PESQ(String Nome){
+	public String PESQ(String Nome,double Somar){
 		int w;
 		for(w = 0; w < this.vDouble.length; w++){
 			if(this.vDouble[w].nome.equals(Nome)){
-				return String.valueOf(vDouble[w].valor);
+				return String.valueOf(vDouble[w].valor + Somar);
 			}
 		}
 		for(w = 0; w < this.vInteiro.length; w++){
 			if(this.vInteiro[w].nome.equals(Nome)){
-				return String.valueOf(vInteiro[w].valor);
+				return String.valueOf(vInteiro[w].valor + Somar);
 			}
 		}
 		return Nome;
 	}
 	
-	public void Pesquisar(String Nome, String Valor){
+	public boolean Pesquisar(String Nome, String Valor){
 		int w;
 		for(w = 0; w < this.vDouble.length; w++){
 			if(this.vDouble[w].nome.equals(Nome)){
 				vDouble[w].TransformaValor(Valor);
+				return true;
 			}
 		}
 		for(w = 0; w < this.vInteiro.length; w++){
 			if(this.vInteiro[w].nome.equals(Nome)){
 				vInteiro[w].TransformaValor(Valor);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void CriaVariavel_Double(String l, Variavel V){
 		for(int w =0; w < this.vDouble.length; w++){
 			if(this.vDouble[w].Vazio){	
+				Pesquisar(Pegar_Nome(l),Pegar_Valor(l,V));
 				vDouble[w].SetVariavel_Double(Pegar_Nome(l),Pegar_Valor(l,V));
 				break;
 			}
@@ -163,8 +187,9 @@ class Variavel{
 		while(l.charAt(x) != ' '){
 			x++; 
 			if(l.charAt(x - 1) == ')') break;
+			if(l.charAt(x - 1) == '(') break;// Usa no for exemplo four(K <) 45 caso o K esteja do lado do ( 
 		}// Sai com X valendo ESPAÇO;
-		while(l.charAt(x) == ' ') x++; // Agora X vale o primeiro caracter
+		while(l.charAt(x) == ' ') x++; // Agora X vale o primeiro caracter, caso nao tenha espaço ele nem entra no laço
 		return x;
 	}
 	
@@ -173,9 +198,8 @@ class Variavel{
 		String Nome = "";
 		x = PosicionaX(x,l);
 		while(l.charAt(x) != '<'){
-			if(l.charAt(x) != ' ') Nome += l.charAt(x);
-			else if (l.charAt(x) == ' ' && (l.charAt(x+1) == ' ' || l.charAt(x+1) == '<')) ;
-			else Nome += " ";
+			if(l.charAt(x) == '?') break;
+			if(l.charAt(x) != ' ' && l.charAt(x) != 9) Nome += l.charAt(x);
 			x++;
 		}
 		return Nome;
@@ -184,20 +208,29 @@ class Variavel{
 	public String Pegar_Valor(String l, Variavel V){
 		int x = 0;
 		String Valor = "";
+		String LinhaExp = "";
 		Operacao Exp = new Operacao();
-		while(l.charAt(x)!= '<') x++;
-		x = PosicionaX(x,l);
-		if(Exp.testeExpressao(l)){
-			Exp.Expressoes(l,V);
-			Valor = String.valueOf(Exp.Result);
+		if(!l.contains("<)")){
+			Valor += '0';
 		} else {
-			while(l.charAt(x) != '?'){
-				if(l.charAt(x) == ' ') break; 
-				Valor += l.charAt(x);
-				x++;
+			while(l.charAt(x)!= '<') x++;
+			x = PosicionaX(x,l);
+			if(Exp.TokensAritmeticos(l) != '0' || !Exp.TokenComparativos(l).equals("")){
+				while(l.charAt(x-1) != '?'){ 
+					LinhaExp += l.charAt(x);
+					x++;
+				}
+				Exp.Expressoes(LinhaExp,V);
+				Valor = String.valueOf(Exp.Result);
+			} else {
+				while(l.charAt(x) != '?'){
+					if(l.charAt(x) == ' ') break; 
+					Valor += l.charAt(x);
+					x++;
+				}
+				Valor = PESQ(Valor,0);
 			}
 		}
 		return Valor;
-	}
-	
+	}	
 }

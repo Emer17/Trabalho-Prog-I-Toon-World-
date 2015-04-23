@@ -3,6 +3,7 @@ class Operacao{
 	private double B;
 	public double Result;
 	private boolean TokenNegativo = false;
+	public boolean TokenComparativo = false;
 	
 	public Operacao(){
 		this.A = 0;
@@ -19,51 +20,6 @@ class Operacao{
 		this.B = Double.valueOf(C).doubleValue();
 	}
 	
-	public void Soma(){
-		this.Result = this.A + this.B;
-	}
-	
-	public void Sub(){
-		this.Result = this.A - this.B;
-	}
-	
-	public void Mult(){
-		this.Result = this.A * this.B;
-	}
-	
-	public void Div(){
-		this.Result = this.A / this.B;
-	}
-	
-	public void Mod(){
-		this.Result = this.A % this.B;
-	}
-	
-	public boolean testeExpressao(String l){
-		boolean T = false;
-		for(int w = 0; w < l.length(); w++) {
-			if(l.charAt(w) == '-'){ 
-				T = true;
-				break;
-			} else if (l.charAt(w) == '+'){				
-				T = true;
-				break;
-			} else if (l.charAt(w) == '/'){ 
-				T = true;
-				break;				
-			} else if (l.charAt(w) == '*'){ 
-				T = true;
-				break;
-			} else if (l.charAt(w) == '%'){
-				T = true;
-				break;
-			} else {
-				T = false;
-			}
-		}
-		return T;
-	}
-	
 	public void TokenEspecial(String l){
 		for(int w = 0; w < l.length(); w++) {
 			if(l.charAt(w) == '!'){ 
@@ -75,58 +31,133 @@ class Operacao{
 		}
 	}
 	
-	public void Expressoes(String l, Variavel V){
-		if(testeExpressao(l)){
-			int x;
-			this.TokenNegativo = false;
-			TokenEspecial(l);
-			for(x = 0; x < l.length(); x++ ){
-				if(l.charAt(x) == '+' || l.charAt(x) == '-' || l.charAt(x) == '*' || l.charAt(x) == '/' || l.charAt(x) == '%'){
-					break;
-				}
+	public void OperacaoAritmetica(char Token){
+		if(Token == '+'){
+			this.Result = this.A + this.B;
+		} else if(Token == '-'){
+			this.Result = this.A - this.B;
+		} else if(Token == '*'){
+			this.Result = this.A * this.B;
+		} else if(Token == '/'){
+			this.Result = this.A / this.B;
+		} else if(Token == '%'){
+			this.Result = this.A % this.B;
+		}
+	}
+	
+	public char TokensAritmeticos(String l){
+		for(int x = 0; x < l.length(); x++ ){
+			if(l.charAt(x) == '+') return l.charAt(x);
+			else if(l.charAt(x) == '-') return l.charAt(x);
+			else if(l.charAt(x) == '*') return l.charAt(x);
+			else if(l.charAt(x) == '/') return l.charAt(x);
+			else if(l.charAt(x) == '%') return l.charAt(x);
+		}
+		return '0';
+	}
+	
+	public String TokenComparativos(String l){
+		String J = "";
+		for(int x = 0; x < l.length(); x++ ){
+			if(l.charAt(x) == '>' && l.charAt(x+1) == '>'){ //MAIOR
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				return J;
+			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '<'){ //MENOR
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				return J;
+			} else if(l.charAt(x) == '>' && l.charAt(x+1) == '|'){ // MAIOR-IGUAL 
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				return J;
+			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '|'){ // MENOR-IGUAL
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				return J;
+			} else if(l.charAt(x) == '|' && l.charAt(x+1) == '=' && l.charAt(x+2) == '|'){ // IGUAL
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				J += l.charAt(x+2);
+				return J;
+			} else if(l.charAt(x) == '=' && l.charAt(x+1) == '|' && l.charAt(x+2) == '='){ // DIFERENTE
+				J += l.charAt(x);
+				J += l.charAt(x+1);
+				J += l.charAt(x+2);
+				return J;
 			}
-			char Token = l.charAt(x);
-			int w = x - 1;
-			while(l.charAt(w) == ' ') w--;// Percore ate achar a Variavel A. Exemplo: 8      + 9?
-			String Concatenar = "";
-			while(l.charAt(w) != ' '){
-				if(l.charAt(w) == ')') break;
-				if(l.charAt(w) == '!') break;
-				Concatenar += l.charAt(w);
-				w--;
-			}
-			Concatenar = Inverter(Concatenar);
-			Concatenar = V.PESQ(Concatenar);
-			setA(Concatenar);
-			Concatenar = "";
-			w = x + 1;
-			while(l.charAt(w) == ' ' ) w++;// Percore ate achar a Variavel B. Exemplo: 8 +      9?
-			while(l.charAt(w) != '?'){
-				if(l.charAt(w) == ' ') break;
-				Concatenar += l.charAt(w);
-				w++;
-			}
-			Concatenar = V.PESQ(Concatenar);
-			setB(Concatenar);
-			if (Token == '-'){
-				Sub();
-			} else if (Token == '+') {
-				Soma();
-			} else if (Token == '/') {
-				Div();
-			} else if (Token == '*') {
-				Mult();
-			} else if (Token == '%') {
-				Mod();
+		}
+		return J;
+	}
+	
+	public void VereficaComparacao(String l){
+		this.TokenComparativo = false;
+		for(int x = 0; x < l.length(); x++ ){
+			if(l.charAt(x) == '>' && l.charAt(x+1) == '>'){ //MAIOR
+				if(this.A > this.B) this.TokenComparativo = true;
+				break;
+			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '<'){ //MENOR
+				if(this.A < this.B) this.TokenComparativo = true;
+				break;
+			} else if(l.charAt(x) == '>' && l.charAt(x+1) == '|'){ // MAIOR-IGUAL 
+				if(this.A >= this.B) this.TokenComparativo = true;
+				break;	
+			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '|'){ // MENOR-IGUAL
+				if(this.A <= this.B) this.TokenComparativo = true;
+				break;
+			} else if(l.charAt(x) == '|' && l.charAt(x+1) == '=' && l.charAt(x+2) == '|'){ // IGUAL
+				if(this.A == this.B) this.TokenComparativo = true;
+				break;
+			} else if(l.charAt(x) == '=' && l.charAt(x+1) == '|' && l.charAt(x+2) == '='){ // DIFERENTE
+				if(this.A != this.B) this.TokenComparativo = true;
+				break;
 			}
 		}
 	}
 	
-	public String Inverter(String S){  
-        String Reverse = "";
-		for (int w = S.length() - 1; w > -1; w--) {    
-            Reverse += String.valueOf(S.charAt(w));
+	public void Expressoes(String l, Variavel V){
+		this.TokenNegativo = false;
+		TokenEspecial(l);
+		String Concatenar = "";
+		int x = 0;
+		if(TokensAritmeticos(l) != '0'){
+			while(l.charAt(x) != ' '){
+				if(l.charAt(x) == TokensAritmeticos(l)) break;
+				Concatenar += l.charAt(x);
+				x++;
+			}
+			while(l.charAt(x-1) != TokensAritmeticos(l)) x++;
+			Concatenar = V.PESQ(Concatenar,0);//Confere se eh uma variavel
+			setA(Concatenar);
+			Concatenar = "";
+			while(l.charAt(x) == ' ' ) x++;// Percore ate achar a Variavel B. Exemplo: 8 +      9?
+			while(l.charAt(x) != '?'){
+				if(l.charAt(x) == ' ') break;
+				Concatenar += l.charAt(x);
+				x++;
+			}
+			Concatenar = V.PESQ(Concatenar,0);
+			setB(Concatenar);
+			OperacaoAritmetica(TokensAritmeticos(l));
+		} else if(!TokenComparativos(l).equals("")){
+			while(l.charAt(x) != ' '){
+				if(l.charAt(x) == '|' || l.charAt(x) == '<' || l.charAt(x) == '>' || l.charAt(x) == '=') break;
+				Concatenar += l.charAt(x);
+				x++;
+			}
+			Concatenar = V.PESQ(Concatenar,0);//Confere se eh uma variavel
+			setA(Concatenar);
+			Concatenar = "";
+			while(l.charAt(x) == '|' || l.charAt(x) == '<' || l.charAt(x) == '>' || l.charAt(x) == '=' || l.charAt(x) == ' ') x++;
+			// Percore ate achar a Variavel B. Exemplo: 8 +      9?
+			while(l.charAt(x) != '?'){
+				if(l.charAt(x) == ' ') break;
+				Concatenar += l.charAt(x);
+				x++;
+			}
+			Concatenar = V.PESQ(Concatenar,0);
+			setB(Concatenar);
+			VereficaComparacao(l);
 		}
-		return Reverse;
 	}
 }
