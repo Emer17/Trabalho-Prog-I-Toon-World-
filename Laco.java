@@ -1,5 +1,4 @@
 class Laco{
-
 	public void four(Variavel V, Operacao OP, String l[], int TOPO){
 		int x = 0;
 		String Parte1 = "";
@@ -14,7 +13,6 @@ class Laco{
 						Parte1 += l[i].charAt(x);
 						x++;
 					}
-					//System.out.println(Parte1);
 					V.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali
 					//Termino da FASE 1 do for
 					while(l[i].charAt(x) == ' ') x++;
@@ -23,7 +21,6 @@ class Laco{
 						x++;
 					}
 					Parte2 += l[i].charAt(x);
-					//System.out.println(Parte2);
 					OP.Expressoes(Parte2, V);//Confere qual tipo de comparação eh
 					//Termino da FASE 2 do for
 					x++;
@@ -33,7 +30,6 @@ class Laco{
 						x++;
 					}
 					Parte3 += l[i].charAt(x);//Confere se eh MaisMais ou MenosMenos
-					//System.out.println(Parte3);
 					//Termino da FASE 3 do for
 					do{
 						if(PrimeiraEntrada){
@@ -41,7 +37,6 @@ class Laco{
 							PrimeiraEntrada = false;
 						}
 						for(int k = i+1; k < l.length; k++){
-							//System.out.println(l[k] + " valor de k: " + k);
 							if(l[k] != null) {
 								V.CriaVariavel(l[k], V);
 								V.ModificacaoNaVariavel(l[k],V);
@@ -57,5 +52,4 @@ class Laco{
 			}
 		}
 	}
-
 }
