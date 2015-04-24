@@ -63,7 +63,6 @@ class Variavel{
 			if(l.charAt(x) != ' ' && l.charAt(x) != 9) Nome += l.charAt(x);
 			x++;
 		}
-		System.out.println("Nome : ->>>" + Nome);
 		Pesquisar(Nome,Pegar_Valor(l,V));
 	}
 	

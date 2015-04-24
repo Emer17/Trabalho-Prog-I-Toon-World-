@@ -1,7 +1,8 @@
-Double A<) 19+1?
-Double B<) 0?
+Int A <) 5?
+Int B <) 10?
 if{A<<B}[
-	printlb{"oi"}?
+	print{"AAA"}?
 ]else[
-	printlb{"voce"}?
+	print{"BBB"}?
 ]
+

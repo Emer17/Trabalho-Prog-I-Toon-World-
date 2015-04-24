@@ -15,11 +15,12 @@ class Interpretador {
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
 				V.CriaVariavel(linhas[i],V);
-				OP.Expressoes(linhas[i],V);
+				V.ModificacaoNaVariavel(linhas[i],V);
+				
 			}
 		}
-		V.Imprimir_Vetores();
-		C.executaIf(linhas,V,OP);
+		//V.Imprimir_Vetores();
+		C.executaIf(linhas,V,OP,0);
         /*for(int i = 0; i < this.linhas.length; i++) {
             int x = 0;
             if(this.linhas[i] != null) {

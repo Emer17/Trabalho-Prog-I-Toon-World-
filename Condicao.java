@@ -33,7 +33,7 @@ class Condicao{
 							while(linha.charAt(i) != '}'){
 								printa += linha.charAt(i);
 								i++;
-								printa = V.PESQ(printa);
+								printa = V.PESQ(printa,0);
 								imprime = Double.valueOf(printa).doubleValue();
 								System.out.println(imprime);
 								break;
@@ -47,138 +47,56 @@ class Condicao{
 			}
 		}
 		
-	public boolean verificaToken(String l){
-		if(l.contains("==") || l.contains("!=") || l.contains(">>") || l.contains("<<") || l.contains(">|") || l.contains("<|"))
-			return true;
-		else
-			return false;
-	}
-	
-	public void pegaToken(String l){
-		int x;
-		for(x = 0; x < l.length(); x++){
-			if(l.charAt(x) == '{'){
-				x++;
-				while(l.charAt(x) != '=' && l.charAt(x) != '!' && l.charAt(x) != '>' && l.charAt(x) != '<'){
-					this.antes += l.charAt(x);
-					x++;
-				}
-				x = x+2;
-				while(l.charAt(x) != '}'){
-					this.depois += l.charAt(x);
-					x++;
-				}
-			}
-		}
-	}				
-				
-	public boolean testaexp(String l,Variavel V,Operacao OP){
-		String antes2,depois2;
-		double antes3,depois3;
-		if(l.contains("==")){
-			if(this.antes == this.depois)
-				return true;
-			else
-				return false;
-		}else if(l.contains("!=")){
-			if(this.antes != this.depois)
-				return true;
-			else
-				return false;
-		}else{
-			antes2 = V.PESQ(this.antes);
-			depois2 = V.PESQ(this.depois);
-			antes3 =  Double.valueOf(antes2).doubleValue();
-			depois3 =  Double.valueOf(depois2).doubleValue();
 
-			if(l.contains(">>")){
-				if(antes3 > depois3)
-					return true;
-			}else if(l.contains("<<")){
-				if(antes3 < depois3)
-					return true;
-			}else if(l.contains(">|")){
-				if(antes3 >= depois3)
-					return true;							
-			}else if(l.contains("<|")){
-				if(antes3 <= depois3)
-					return true;
-			}
-		}
-		return false;
-	}
-	
-	public double pegaExp(String l,Variavel V,Operacao OP){  //serve para o caso de dentro do if ter apenas o nome de uma variavel
-		int x;
-		String exp = "";
-		String expressao = "";
-		double result = 0.0;
-		for(x = 0; x < l.length(); x++){
-			if(l.charAt(x) == '{'){
-				x++;
-				while(l.charAt(x) != '}'){
-					exp += l.charAt(x);
-					x++;
-				}
-				expressao = V.PESQ(exp);
-				System.out.println("expressao   " + expressao); //deveria retornar valor, mesmo problema la de cima :S
-				result =  Double.valueOf(expressao).doubleValue(); //valor convertido pra double...
-			}
-		}
-		return result;
-	}
-	
-	public void executaIf(String l[],Variavel V,Operacao OP){
-		int num = 0,p;
-		double exp1;
-		for(p = 0; p < l.length; p++){
+
+	public void executaIf(String l[],Variavel V,Operacao OP,int p){
+		int num = 0;
+		String teste = "";
+		int i = 0;
+		while(p < l.length){
 			if(l[p] != null){
-				do{
 					if(l[p].contains("if")){
-						num++;
-						if(verificaToken(l[p])){
-							pegaToken(l[p]);
-							if(testaexp(l[p],V,OP)){
-								p++;
+						while(l[p].charAt(i) != '{'){
+							i++;
+						}
+						i++;
+						while(l[p].charAt(i-1) != '}'){
+							teste += l[p].charAt(i);
+							i++;
+						}
+						p++;
+						OP.Expressoes(teste,V);//executa as linhas, independente de estarem dentro do "if" ou do "else"
+							if(OP.TokenComparativo){
+								while(!l[p].contains("else")){
+									V.CriaVariavel(l[p],V);						
+									if(l[p].contains("print") || l[p].contains("printlb"))
+										print(l[p],V,OP);							
+									if(l[p].contains("if"))
+										executaIf(l,V,OP,p);
+									p++;
+								}
+								break;
 							}else{
-								while((!l[p].contains("else")) && (!l[p].contains("]"))){
+								while(!l[p].contains("else")){
 									p++;
 								}
-								if((l[p].contains("]")) && (!l[p].contains("else"))){
-									num--;
-								}else if(l[p].contains("else")){
-									p++;
-								}
-							}
-						}else{
-							exp1 = pegaExp(l[p],V,OP);
-							if(exp1 >=1){
 								p++;
-							}else{
-								while((!l[p].contains("else")) || (!l[p].contains("]"))){
+								while(!l[p].contains("]")){
+									V.CriaVariavel(l[p],V);							
+									if(l[p].contains("print") || l[p].contains("printlb"))
+										print(l[p],V,OP);
+									if(l[p].contains("if"))
+										executaIf(l,V,OP,p);						
 									p++;
 								}
-								if((l[p].contains("]")) && (!l[p].contains("else"))){
-									num--;
-								}else if(l[p].contains("else")){
-									p++;
-								}
+								break;
 							}
 						}
-						}else if((!l[p].contains("else"))){ //executa as linhas, independente de estarem dentro do "if" ou do "else"
-							V.CriaVariavel(l[p],V);
-							OP.Expressoes(l[p],V);							
-							if(l[p].contains("print") || l[p].contains("printlb")){
-							print(l[p],V,OP);							
-							}
-							p++;
-						}else{
-							num--;
-						}
-					}while(num != 0);
+					}
+					p++;
 				}
+				return;
 			}
-		}
 		
 	
 }
