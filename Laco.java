@@ -52,4 +52,48 @@ class Laco{
 			}
 		}
 	}
+	
+	public void executaWhile(String l[],Variavel V, Operacao OP,int p){
+		int i = 0,x = 0;
+		String teste ="";
+		while(l[p] != null){
+			if(l[p].contains("while")){//linha tem while
+				x = p; //agora x tem a linha de inicio
+				while(l[p].charAt(i) != '{'){
+					i++;
+				}
+				i++;
+				while(l[p].charAt(i-1) != '}'){
+					teste += l[p].charAt(i);
+					i++;
+				}					
+				p++;
+				OP.Expressoes(teste,V);
+				if(OP.TokenComparativo){
+					do{	
+						while(!l[p].contains("]")){
+							V.CriaVariavel(l[p],V);
+							V.ModificacaoNaVariavel(l[p],V);						
+							if(l[p].contains("print") || l[p].contains("printlb"))
+								print(l[p],V,OP);
+							p++;
+						}
+						p = x; //volta pro inicio
+						OP.Expressoes(teste,V);
+					}while(OP.TokenComparativo);
+				}else{
+					while(!l[p].contains("]")){
+						p++;
+					}
+					p++;
+					break;
+				}				
+			}
+			p++;
+		}
+		return;
+	}	
+	
+	
+
 }

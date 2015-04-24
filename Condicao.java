@@ -1,5 +1,5 @@
 class Condicao{	
-	public void executaIf(String l[],Variavel V,Operacao OP,int p){
+	public void executaIf(String l[],Variavel V,Operacao OP,Comando Com,int p){
 		int num = 0;
 		String teste = "";
 		int i = 0;
@@ -19,9 +19,7 @@ class Condicao{
 					if(OP.TokenComparativo){
 						while(!l[p].contains("else")){
 							V.CriaVariavel(l[p],V);						
-							if(l[p].contains("print") || l[p].contains("printlb")){
-								print(l[p],V,OP);
-							}									
+							if(l[p].contains("print") || l[p].contains("printlb")) Com.print(l[p],V,OP);									
 							if(l[p].contains("if")){
 								executaIf(l,V,OP,p);
 							}	
@@ -35,7 +33,7 @@ class Condicao{
 						p++;
 						while(!l[p].contains("]")){
 							V.CriaVariavel(l[p],V);							
-							if(l[p].contains("print") || l[p].contains("printlb")) print(l[p],V,OP);
+							if(l[p].contains("print") || l[p].contains("printlb")) Com.print(l[p],V,OP);
 							if(l[p].contains("if")) executaIf(l,V,OP,p);						
 							p++;
 						}

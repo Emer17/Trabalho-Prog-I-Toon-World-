@@ -12,6 +12,7 @@ class Interpretador {
 		Variavel V = new Variavel();
 		Laco L = new Laco();
 		Condicao C = new Condicao();
+		Comando Com = new Comando();
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
 				//if(this.linhas[i].contains("four") || this.linhas[i].contains("if") || this.linhas[i].contains("while") || this.linhas[i].contains("else")){
@@ -27,11 +28,11 @@ class Interpretador {
 				} else {
 					V.CriaVariavel(linhas[i], V);
 					V.ModificacaoNaVariavel(linhas[i], V);
-					C.print(linhas[i],V,OP);
+					Com.print(linhas[i],V,OP);
 				}
 			}
 		}
-		C.executaIf(l,V,OP,0);
+		C.executaIf(l,V,OP,Com,0);
 		U.four(V,OP,l,0);
 		V.Imprimir_Vetores();
 		L.executaWhile(l,V,OP,0);
