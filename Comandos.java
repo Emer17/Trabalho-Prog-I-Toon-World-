@@ -1,40 +1,55 @@
+import java.util.Scanner;
 class Comandos{
-	public void print(String linha, Variavel V, Operacao OP){
-		int i,p = 0; //p guarda ultima letra do comando... explicaçao adiante.
-		String printa = "";
-		double imprime;
-		if(linha.contains("print") || linha.contains("printlb")){
-			for(i=0;i<linha.length();i++){
-				if(linha.charAt(i) ==' ' && linha.charAt(i-1) == 't' || linha.charAt(i) =='{' && linha.charAt(i-1) == 't' || linha.charAt(i) ==' ' && linha.charAt(i-1) == 'b' || linha.charAt(i) =='{' && linha.charAt(i-1) == 'b'){
-					p = i-1;
-					if(linha.charAt(i) == ' '){
-						i = i+2;	
-					}else{
-						i++;
-					}
-					if(linha.charAt(i) == '"'){ //caso de ser uma frase qualquer
-						i++;
-						while(linha.charAt(i) != '"'){
-							printa += linha.charAt(i);
-							i++;
-						}
-						System.out.println(printa);
-						break;
-					}else{ //caso de nao ter "" e ser uma variavel
-						while(linha.charAt(i) != '}'){
-							printa += linha.charAt(i);
-							i++;
-							printa = V.PESQ(printa,0);
-							imprime = Double.valueOf(printa).doubleValue();
-							System.out.println(imprime);
-							break;
-						}
-					}
-				}
-			}
-			if(linha.charAt(p)=='b') //p é usado aqui para saber se uma linha deve ser quebrada ou nao.
-				System.out.println();
-			return;
+	public void ComandoDeTela(String l, Variavel V){
+		int x = 0;
+		if(l.contains("print")){
+			String ImprimirLinha = "";
+			while(l.charAt(x) != '{') x++;
+			x++;
+			ImprimirLinha += print(l,V,x,ImprimirLinha);
+			System.out.println(ImprimirLinha);
+		}
+		if(l.contains("ler")){
+			Scanf(l,V,x);
 		}
 	}
+	
+	public String print(String l, Variavel V, int x, String ImprimirLinha){
+		String Conteudo = "";
+		boolean aspas = false;
+		if(l.charAt(x) == '"'){
+			aspas = true;
+			x++;
+		}
+		while(l.charAt(x) != '}'){
+			if(l.charAt(x) == '+' || l.charAt(x) == '}') break;
+			else if(l.charAt(x) == '"');
+			else if(l.charAt(x) == ' '){
+				if(aspas) Conteudo += " ";
+			} else Conteudo += l.charAt(x);
+			x++;
+		}
+		ImprimirLinha += V.PESQ(Conteudo,0);
+		//System.out.print(Conteudo);
+		if(l.charAt(x) == '+') ImprimirLinha = print(l,V,x+1,ImprimirLinha);
+		//System.out.println();
+		return ImprimirLinha;
+	}
+	
+	public void Scanf(String l, Variavel V,int x){//ler(#NomeVariavel)
+		while(l.charAt(x) != '#') x++;
+		x++;
+		String Nome = "";
+		while(l.charAt(x) != ')'){
+			if(l.charAt(x) != ' ') Nome += l.charAt(x);
+			else if (l.charAt(x) == ' ' && (l.charAt(x+1) == ' ' || l.charAt(x+1) == ')'));
+			else Nome += " ";
+			x++;
+		}
+		System.out.println("Lendo para variavel ( " + Nome + " ) :");
+		Scanner scanner = new Scanner(System.in);
+		double valor = scanner.nextDouble();
+		V.Pesquisar(Nome,String.valueOf(valor));
+	}
+
 }

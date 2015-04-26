@@ -8,54 +8,21 @@ class Interpretador {
 
     public void interpreta(String l[]) {
         this.linhas = l;
+		Condicao Con = new Condicao();		
 		Operacao OP = new Operacao();
 		Variavel V = new Variavel();
-		Laco L = new Laco();
-		Condicao C = new Condicao();
-		Comando Com = new Comando();
+		Laco U = new Laco();
+		Comandos C = new Comandos();
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
-				//if(this.linhas[i].contains("four") || this.linhas[i].contains("if") || this.linhas[i].contains("while") || this.linhas[i].contains("else")){
-				if(TesteIgnora(this.linhas,i)){
-					int k = i;
-					for(int a = i; a < this.linhas.length; a++) {
-						if(this.linhas[a] != null){
-							if(this.linhas[a].contains("]")) break;
-							k++;
-						}
-					}
-					i = k;
-				} else {
-					V.CriaVariavel(linhas[i], V);
-					V.ModificacaoNaVariavel(linhas[i], V);
-					Com.print(linhas[i],V,OP);
-				}
+				i = U.four(V,OP,l[i],i,l,C);
+				V.CriaVariavel(linhas[i], V);
+				V.ModificacaoNaVariavel(linhas[i], V);
+				C.ComandoDeTela(linhas[i],V);
 			}
 		}
-		C.executaIf(l,V,OP,Com,0);
-		U.four(V,OP,l,0);
+		Con.executaIf(l,V,OP,Com,0);
 		V.Imprimir_Vetores();
 		L.executaWhile(l,V,OP,0);
 	}
-	
-	public boolean TesteIgnora(String l[], int i){
-		if (l[i].contains("four")) return true;
-		else if (l[i].contains("if")) return true;
-		else if (l[i].contains("while")) return true;
-		else if (l[i].contains("else")) return true;
-		else return false;
-	}
-	
-	/*public int Ignora(String l[], int i){
-		int k = i;
-		int a = 0;
-		for(a = i; a < l.length; a++) {
-			if(l[a] != null){
-				if(l[a].contains("]")) break;
-				k++;
-			}
-		}
-		i = k;
-		return i;
-	}*/
 }
