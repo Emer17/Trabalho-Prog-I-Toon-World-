@@ -52,47 +52,45 @@ class Laco{
 		return TOPO;
 	}
 	
-	public void executaWhile(String l[],Variavel V, Operacao OP,int p){
+
+	public int executaWhile(String linha,String l[],Variavel V, Operacao OP,Comandos Com,int p){
 		int i = 0,x = 0;
 		String teste ="";
-		while(l[p] != null){
-			if(l[p].contains("while")){//linha tem while
-				x = p; //agora x tem a linha de inicio
-				while(l[p].charAt(i) != '{'){
+		if(linha != null){
+			if(linha.contains("while")){
+				x = p+1; //agora x tem a linha de inicio
+				while(linha.charAt(i) != '{'){
 					i++;
 				}
 				i++;
-				while(l[p].charAt(i-1) != '}'){
-					teste += l[p].charAt(i);
+				while(linha.charAt(i-1) != '}'){
+					teste += linha.charAt(i);
 					i++;
-				}					
+				}		
 				p++;
 				OP.Expressoes(teste,V);
 				if(OP.TokenComparativo){
-					do{	
+					do{
+						p = x; //volta pro inicio
 						while(!l[p].contains("]")){
 							V.CriaVariavel(l[p],V);
 							V.ModificacaoNaVariavel(l[p],V);						
-							if(l[p].contains("print") || l[p].contains("printlb"))
-								print(l[p],V,OP);
+							Com.ComandoDeTela(l[p],V);
+							p = executaWhile(l[p],l,V,OP,Com,p);
+							p = four(V,OP,l[p],p,l,Com);
 							p++;
 						}
-						p = x; //volta pro inicio
 						OP.Expressoes(teste,V);
 					}while(OP.TokenComparativo);
 				}else{
 					while(!l[p].contains("]")){
 						p++;
 					}
-					p++;
-					break;
+					return p;
 				}				
 			}
-			p++;
 		}
-		return;
-	}	
-	
-	
-
+		return p;
+	}
+			
 }

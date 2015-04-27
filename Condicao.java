@@ -1,48 +1,45 @@
 class Condicao{	
-	public void executaIf(String l[],Variavel V,Operacao OP,Comando Com,int p){
-		int num = 0;
+	public int executaIf(String linha,String l[],Variavel V,Operacao OP,Comandos Com,int p){
+		//System.out.println("p = " + p);
 		String teste = "";
 		int i = 0;
-		while(p < l.length){
-			if(l[p] != null){
-				if(l[p].contains("if")){
-					while(l[p].charAt(i) != '{'){
+			if(linha != null){
+				if(linha.contains("if")){
+					while(linha.charAt(i) != '{'){
 						i++;
 					}
 					i++;
-					while(l[p].charAt(i-1) != '}'){
-						teste += l[p].charAt(i);
+					while(linha.charAt(i-1) != '}'){
+						teste += linha.charAt(i);
 						i++;
 					}
-					p++;
-					OP.Expressoes(teste,V);//executa as linhas, independente de estarem dentro do "if" ou do "else"
+					p++; // uma linha abaixo daquela que contains("if")
+					OP.Expressoes(teste,V);
 					if(OP.TokenComparativo){
-						while(!l[p].contains("else")){
-							V.CriaVariavel(l[p],V);						
-							if(l[p].contains("print") || l[p].contains("printlb")) Com.print(l[p],V,OP);									
-							if(l[p].contains("if")){
-								executaIf(l,V,OP,p);
-							}	
+						while(!l[p].contains("else") && !l[p].contains("]")){
+							V.CriaVariavel(l[p],V);
+							V.ModificacaoNaVariavel(l[p],V);
+							if(l[p].contains("print") || l[p].contains("printlb")) Com.ComandoDeTela(l[p],V);									
+							if(l[p].contains("if")) p = executaIf(l[p],l,V,OP,Com,p);	
 							p++;
 						}
-						break;
-					} else {
-						while(!l[p].contains("else")){
+						return p;
+					}else{
+						while(!l[p].contains("else") && !l[p].contains("]")){
 							p++;
 						}
-						p++;
+						if(l[p].contains("else")) p++;
 						while(!l[p].contains("]")){
-							V.CriaVariavel(l[p],V);							
-							if(l[p].contains("print") || l[p].contains("printlb")) Com.print(l[p],V,OP);
-							if(l[p].contains("if")) executaIf(l,V,OP,p);						
+							V.CriaVariavel(l[p],V);
+							V.ModificacaoNaVariavel(l[p],V);						
+							Com.ComandoDeTela(l[p],V);
+							p = executaIf(l[p],l,V,OP,Com,p);						
 							p++;
 						}
-						break;
+						return p;
 					}
 				}
 			}
-			p++;
+			return p;
 		}
-		return;
-	}
 }
