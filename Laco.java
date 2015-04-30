@@ -1,5 +1,5 @@
 class Laco{
-	public int four(Variavel V, Operacao OP, String l, int TOPO, String linhas[], Comandos C){
+	public int four(Variavel V[], Variavel Var, Operacao OP, String l, int TOPO, String linhas[], Comandos C){
 		int x = 0;
 		int i = TOPO+1;
 		String Parte1 = "";
@@ -7,12 +7,12 @@ class Laco{
 		String Parte3 = "";
 		boolean PrimeiraEntrada = true;
 		if (l.contains("four")){
-			x = V.PosicionaX(x,l);
+			x = Var.PosicionaX(x,l);
 			while(l.charAt(x-1) != '?'){
 				Parte1 += l.charAt(x);
 				x++;
 			}
-			V.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali
+			Var.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali
 			//Termino da FASE 1 do for
 			while(l.charAt(x) == ' ') x++;
 			while(l.charAt(x) != '?'){
@@ -37,21 +37,20 @@ class Laco{
 				}
 				for(i = TOPO+1; i < linhas.length; i++){
 					if(linhas[i] != null) {
-						i = four(V,OP,linhas[i],i,linhas,C);
-						V.CriaVariavel(linhas[i], V);
-						V.ModificacaoNaVariavel(linhas[i],V);
-						C.ComandoDeTela(linhas[i],V);
+						i = four(V,Var,OP,linhas[i],i,linhas,C);
+						//V.CriaVariavel(linhas[i], V);
+						Var.ModificacaoNaVariavel(linhas[i], V);
+						C.ComandoDeTela(linhas[i],V,Var);
 					}
 					if(linhas[i].contains("]")) break;
 				}
-				V.ModificacaoNaVariavel(Parte3, V);
+				Var.ModificacaoNaVariavel(Parte3, V);
 				OP.Expressoes(Parte2, V);
 			}while(OP.TokenComparativo);
 			TOPO = i;
 		}
 		return TOPO;
 	}
-	
 
 	public int executaWhile(String linha,String l[],Variavel V, Operacao OP,Comandos Com,int p){
 		int i = 0,x = 0;

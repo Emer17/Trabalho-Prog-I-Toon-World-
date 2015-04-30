@@ -50,12 +50,12 @@ class Interpretador {
 		Comandos C = new Comandos();
 		for(int i = 0; i < this.linhas.length; i++) {
             if(this.linhas[i] != null) {
-				i = U.four(V,OP,l[i],i,l,C);
+				i = U.four(V,Var,OP,l[i],i,l,C);
 				i = Con.executaIf(linhas[i],l,V,OP,C,i);
 				i = U.executaWhile(linhas[i],l,V,OP,C,i);
 				CriaVariavel(linhas[i]);
 				Var.ModificacaoNaVariavel(linhas[i], V);
-				C.ComandoDeTela(linhas[i],V);
+				C.ComandoDeTela(linhas[i],V,Var);
 				
 			}
 		}
