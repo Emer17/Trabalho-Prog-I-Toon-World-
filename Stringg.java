@@ -1,19 +1,7 @@
-class Stringg {
-	public String conteudo;
-	public String nome;
-	public boolean Vazio;
+class Stringg extends Variavel{
 	
-	public Stringg(){
-		this.nome = "";
-		this.conteudo = "";
-		this.Vazio = true;
-	}
-	
-	public void ConcatenarNome(String N){
-		this.nome = N;
-	}
-	
-	public void ConcatenarConteudo(char C){
-		this.conteudo += "" + C;
+	public Stringg(String l){
+		this.nome = super.Pegar_Nome(l,true);
+		this.valor = super.Pegar_ValorString(l);
 	}
 }

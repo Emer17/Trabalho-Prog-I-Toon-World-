@@ -115,19 +115,21 @@ class Operacao{
 		}
 	}
 	
-	public void Expressoes(String l, Variavel V){
+	public void Expressoes(String l, Variavel V[]){
 		this.TokenNegativo = false;
 		TokenEspecial(l);
+		Variavel J = new Variavel();
 		String Concatenar = "";
 		int x = 0;
 		if(TokensAritmeticos(l) != '0'){
 			while(l.charAt(x) != ' '){
 				if(l.charAt(x) == TokensAritmeticos(l)) break;
-				Concatenar += l.charAt(x);
+				if(l.charAt(x) == '!');
+				else Concatenar += l.charAt(x);
 				x++;
 			}
 			while(l.charAt(x-1) != TokensAritmeticos(l)) x++;
-			Concatenar = V.PESQ(Concatenar,0);//Confere se eh uma variavel
+			Concatenar = J.LocalizarVariavel(Concatenar,V);//Confere se eh uma variavel
 			setA(Concatenar);
 			Concatenar = "";
 			while(l.charAt(x) == ' ' ) x++;// Percore ate achar a Variavel B. Exemplo: 8 +      9?
@@ -136,7 +138,7 @@ class Operacao{
 				Concatenar += l.charAt(x);
 				x++;
 			}
-			Concatenar = V.PESQ(Concatenar,0);
+			Concatenar = J.LocalizarVariavel(Concatenar,V);
 			setB(Concatenar);
 			OperacaoAritmetica(TokensAritmeticos(l));
 		} else if(!TokenComparativos(l).equals("")){
@@ -145,17 +147,17 @@ class Operacao{
 				Concatenar += l.charAt(x);
 				x++;
 			}
-			Concatenar = V.PESQ(Concatenar,0);//Confere se eh uma variavel
+			Concatenar = J.LocalizarVariavel(Concatenar,V);//Confere se eh uma variavel
 			setA(Concatenar);
 			Concatenar = "";
 			while(l.charAt(x) == '|' || l.charAt(x) == '<' || l.charAt(x) == '>' || l.charAt(x) == '=' || l.charAt(x) == ' ') x++;
 			// Percore ate achar a Variavel B. Exemplo: 8 +      9?
-			while(l.charAt(x) != '}'){
-				if(l.charAt(x) == ' ' && l.charAt(x) == '?') break;
+			while(l.charAt(x) != '?'){
+				if(l.charAt(x) == ' ') break;
 				Concatenar += l.charAt(x);
 				x++;
 			}
-			Concatenar = V.PESQ(Concatenar,0);
+			Concatenar = J.LocalizarVariavel(Concatenar,V);
 			setB(Concatenar);
 			VereficaComparacao(l);
 		}
