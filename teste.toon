@@ -1,8 +1,6 @@
 Int A <) 5?
 Int B <) 10?
 if{A<<B}[
-	print{"AAA"}?
-]else[
-	print{"BBB"}?
+	print{B}?
 ]
 

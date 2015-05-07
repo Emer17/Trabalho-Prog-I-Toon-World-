@@ -152,7 +152,7 @@ class Operacao{
 			Concatenar = "";
 			while(l.charAt(x) == '|' || l.charAt(x) == '<' || l.charAt(x) == '>' || l.charAt(x) == '=' || l.charAt(x) == ' ') x++;
 			// Percore ate achar a Variavel B. Exemplo: 8 +      9?
-			while(l.charAt(x) != '?'){
+			while(l.charAt(x) != '?' && l.charAt(x) != '}'){
 				if(l.charAt(x) == ' ') break;
 				Concatenar += l.charAt(x);
 				x++;

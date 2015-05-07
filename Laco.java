@@ -52,7 +52,7 @@ class Laco{
 		return TOPO;
 	}
 
-	public int executaWhile(String linha,String l[],Variavel V, Operacao OP,Comandos Com,int p){
+	public int executaWhile(Variavel Var,String linha,String l[],Variavel V[], Operacao OP,Comandos Com,int p){
 		int i = 0,x = 0;
 		String teste ="";
 		if(linha != null){
@@ -72,11 +72,11 @@ class Laco{
 					do{
 						p = x; //volta pro inicio
 						while(!l[p].contains("]")){
-							V.CriaVariavel(l[p],V);
-							V.ModificacaoNaVariavel(l[p],V);						
-							Com.ComandoDeTela(l[p],V);
-							p = executaWhile(l[p],l,V,OP,Com,p);
-							p = four(V,OP,l[p],p,l,Com);
+							//V.CriaVariavel(l[p],V);
+							Var.ModificacaoNaVariavel(l[p],V);						
+							Com.ComandoDeTela(l[p],V,Var);
+							p = executaWhile(Var,l[p],l,V,OP,Com,p);
+							p = four(V,Var,OP,l[p],p,l,Com);
 							p++;
 						}
 						OP.Expressoes(teste,V);
