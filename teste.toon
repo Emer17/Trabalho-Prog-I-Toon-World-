@@ -1,6 +1,12 @@
-Int A <) 5?
-Int B <) 10?
-if{A<<B}[
-	print{B}?
-]
-
+Int a <) 9?
+Double b<)8?
+Int i?
+four{a<)0?a<<1?a...?}[
+	print{"for 1" }?
+	four{i<)0? i >> 1 ? i...?}[
+		print{"for 2"}
+		four{b<)0? b << 1 ? b...?}[
+			print{"for 3"}
+		]f
+	]f
+]f

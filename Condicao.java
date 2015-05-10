@@ -1,14 +1,14 @@
 class Condicao{	
-	public int executaIf(Variavel Var,String linha,String l[],Variavel V[],Operacao OP,Comandos Com,int p){
-		//System.out.println("p = " + p);
+	public int executaIf(Variavel V[], String linha, int p, String l[]){
+		Interpretador I = new Interpretador();
+		Operacao OP = new Operacao();
 		String teste = "";
 		int i = 0;
 			if(linha != null){
-				if(linha.contains("if")){
-					while(linha.charAt(i) != '{'){
-						i++;
-					}
+				if(linha.startsWith("if")){
+					while(linha.charAt(i) != '{') i++;
 					i++;
+					while(linha.charAt(i) == ' ') i++;
 					while(linha.charAt(i-1) != '}'){
 						teste += linha.charAt(i);
 						i++;
@@ -16,27 +16,23 @@ class Condicao{
 					p++; // uma linha abaixo daquela que contains("if")
 					OP.Expressoes(teste,V);
 					if(OP.TokenComparativo){
-						while(!l[p].contains("else") && !l[p].contains("]")){
-							//V.CriaVariavel(l[p],V);
-							Var.ModificacaoNaVariavel(l[p],V);
-							if(l[p].contains("print") || l[p].contains("printlb")) Com.ComandoDeTela(l[p],V,Var);									
-							if(l[p].contains("if")) p = executaIf(Var,l[p],l,V,OP,Com,p);	
+						while(!l[p].startsWith("]i")){
+							p = I.VereficarLinha(l,V,p);
 							p++;
 						}
-						return p;
-					}else{
-						while(!l[p].contains("else") && !l[p].contains("]")){
+						if(l[p].contains("else")){
 							p++;
-						}
-						if(l[p].contains("else")) p++;
-						while(!l[p].contains("]")){
-							//V.CriaVariavel(l[p],V);
-							Var.ModificacaoNaVariavel(l[p],V);						
-							Com.ComandoDeTela(l[p],V,Var);
-							p = executaIf(Var,l[p],l,V,OP,Com,p);						
+							while(!l[p].startsWith("]e")) p++;
+						}	
+					} else {
+						while(!l[p].startsWith("]i")) p++;
+						if(l[p].contains("else")){
 							p++;
+							while(!l[p].contains("]e")){
+								p = I.VereficarLinha(l,V,p);
+								p++;
+							}
 						}
-						return p;
 					}
 				}
 			}

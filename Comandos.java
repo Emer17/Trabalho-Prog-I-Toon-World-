@@ -1,21 +1,22 @@
 import java.util.Scanner;
 class Comandos{
-	public void ComandoDeTela(String l, Variavel V[], Variavel Var){
+	public void ComandoDeTela(String l, Variavel V[]){
 		int x = 0;
 		if(l.contains("print")){
 			String ImprimirLinha = "";
 			while(l.charAt(x) != '{') x++;
 			x++;
-			ImprimirLinha += print(l,V,Var,x,ImprimirLinha);
+			ImprimirLinha += print(l,V,x,ImprimirLinha);
 			System.out.println(ImprimirLinha);
 		}
 		if(l.contains("ler")){
-			Scanf(l,V,Var,x);
+			Scanf(l,V,x);
 		}
 	}
 	
-	public String print(String l, Variavel V[], Variavel Var, int x, String ImprimirLinha){
+	public String print(String l, Variavel V[], int x, String ImprimirLinha){
 		String Conteudo = "";
+		Variavel Var = new Variavel();
 		boolean aspas = false;
 		if(l.charAt(x) == '"'){
 			aspas = true;
@@ -30,11 +31,12 @@ class Comandos{
 			x++;
 		}
 		ImprimirLinha += Var.LocalizarVariavel(Conteudo,V);
-		if(l.charAt(x) == '+') ImprimirLinha = print(l,V,Var,x+1,ImprimirLinha);
+		if(l.charAt(x) == '+') ImprimirLinha = print(l,V,x+1,ImprimirLinha);
 		return ImprimirLinha;
 	}
 	
-	public void Scanf(String l, Variavel V[], Variavel Var, int x){//ler(#NomeVariavel)
+	public void Scanf(String l, Variavel V[], int x){//ler(#NomeVariavel)
+		Variavel Var = new Variavel();
 		while(l.charAt(x) != '#') x++;
 		x++;
 		String Nome = "";

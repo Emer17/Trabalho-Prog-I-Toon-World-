@@ -25,24 +25,16 @@ class Operacao{
 			if(l.charAt(w) == '!'){ 
 				this.TokenNegativo = true;
 				break;
-			} else {
-				this.TokenNegativo = false;
 			}
 		}
 	}
 	
 	public void OperacaoAritmetica(char Token){
-		if(Token == '+'){
-			this.Result = this.A + this.B;
-		} else if(Token == '-'){
-			this.Result = this.A - this.B;
-		} else if(Token == '*'){
-			this.Result = this.A * this.B;
-		} else if(Token == '/'){
-			this.Result = this.A / this.B;
-		} else if(Token == '%'){
-			this.Result = this.A % this.B;
-		}
+		if(Token == '+') this.Result = this.A + this.B;
+		else if(Token == '-') this.Result = this.A - this.B;
+		else if(Token == '*') this.Result = this.A * this.B;
+		else if(Token == '/') this.Result = this.A / this.B;
+		else if(Token == '%') this.Result = this.A % this.B;
 	}
 	
 	public char TokensAritmeticos(String l){
@@ -57,37 +49,37 @@ class Operacao{
 	}
 	
 	public String TokenComparativos(String l){
-		String J = "";
+		String Token = "";
 		for(int x = 0; x < l.length(); x++ ){
 			if(l.charAt(x) == '>' && l.charAt(x+1) == '>'){ //MAIOR
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				return Token;
 			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '<'){ //MENOR
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				return Token;
 			} else if(l.charAt(x) == '>' && l.charAt(x+1) == '|'){ // MAIOR-IGUAL 
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				return Token;
 			} else if(l.charAt(x) == '<' && l.charAt(x+1) == '|'){ // MENOR-IGUAL
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				return Token;
 			} else if(l.charAt(x) == '|' && l.charAt(x+1) == '=' && l.charAt(x+2) == '|'){ // IGUAL
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				J += l.charAt(x+2);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				Token += l.charAt(x+2);
+				return Token;
 			} else if(l.charAt(x) == '=' && l.charAt(x+1) == '|' && l.charAt(x+2) == '='){ // DIFERENTE
-				J += l.charAt(x);
-				J += l.charAt(x+1);
-				J += l.charAt(x+2);
-				return J;
+				Token += l.charAt(x);
+				Token += l.charAt(x+1);
+				Token += l.charAt(x+2);
+				return Token;
 			}
 		}
-		return J;
+		return Token;
 	}
 	
 	public void VereficaComparacao(String l){
@@ -133,7 +125,7 @@ class Operacao{
 			setA(Concatenar);
 			Concatenar = "";
 			while(l.charAt(x) == ' ' ) x++;// Percore ate achar a Variavel B. Exemplo: 8 +      9?
-			while(l.charAt(x) != '?'){
+			while(l.charAt(x) != '?' && l.charAt(x) != '}'){
 				if(l.charAt(x) == ' ') break;
 				Concatenar += l.charAt(x);
 				x++;

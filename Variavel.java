@@ -71,8 +71,8 @@ class Variavel{
 	public int PosicionaX(int x, String l){
 		while(l.charAt(x) != ' '){
 			x++; 
-			if(l.charAt(x - 1) == ')') break;
-			if(l.charAt(x - 1) == '(') break;// Usa no for exemplo four(K <) 45 caso o K esteja do lado do ( 
+			if(l.charAt(x - 1) == '}' || l.charAt(x - 1) == ')') break;
+			if(l.charAt(x - 1) == '{' || l.charAt(x - 1) == '(') break;// Usa no for exemplo four{K <) 45 caso o K esteja do lado do ( 
 		}// Sai com X valendo ESPAÇO;
 		while(l.charAt(x) == ' ') x++; // Agora X vale o primeiro caracter, caso nao tenha espaço ele nem entra no laço
 		return x;
