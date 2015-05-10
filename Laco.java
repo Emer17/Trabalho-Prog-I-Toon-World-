@@ -1,55 +1,63 @@
 class Laco{
-	public int four(Variavel V[], Variavel Var, Operacao OP, String l, int TOPO, String linhas[], Comandos C){
+	public int four(Variavel V[], String l, int TOPO, String linhas[]){
 		int x = 0;
 		int i = TOPO+1;
-		String Parte1 = "";
-		String Parte2 = "";
-		String Parte3 = "";
-		boolean PrimeiraEntrada = true;
-		if (l.contains("four")){
-			x = Var.PosicionaX(x,l);
+		String Parte1 = "", Parte2 = "", Parte3 = "";
+		Variavel Var = new Variavel();
+		Interpretador I = new Interpretador();
+		Operacao OP = new Operacao();
+		if (l.startsWith("four")){
+			x = l.indexOf(123);
+			x++;
 			while(l.charAt(x-1) != '?'){
 				Parte1 += l.charAt(x);
 				x++;
 			}
-			Var.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali
-			//Termino da FASE 1 do for
+			Var.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali. Termino da FASE 1 do for
 			while(l.charAt(x) == ' ') x++;
 			while(l.charAt(x) != '?'){
 				Parte2 += l.charAt(x);
 				x++;
 			}
 			Parte2 += l.charAt(x);
-			OP.Expressoes(Parte2, V);//Confere qual tipo de comparação eh
-			//Termino da FASE 2 do for
+			OP.Expressoes(Parte2, V);//Confere qual tipo de comparação eh. Termino da FASE 2 do for
 			x++;
 			while(l.charAt(x) == ' ') x++;
 			while(l.charAt(x) != '?'){
 				Parte3 += l.charAt(x);
 				x++;
 			}
-			Parte3 += l.charAt(x);//Confere se eh MaisMais ou MenosMenos
-			//Termino da FASE 3 do for
-			do{
-				if(PrimeiraEntrada){
-					if(!OP.TokenComparativo) break;
-					PrimeiraEntrada = false;
+			Parte3 += l.charAt(x);//Confere se eh MaisMais ou MenosMenos. Termino da FASE 3 do for
+			if(!OP.TokenComparativo){
+				while(!linhas[i].startsWith("]f")){
+					i = IgnoraOutrosFors(linhas,i);
+					i++;
 				}
-				for(i = TOPO+1; i < linhas.length; i++){
-					if(linhas[i] != null) {
-						i = four(V,Var,OP,linhas[i],i,linhas,C);
-						//V.CriaVariavel(linhas[i], V);
-						Var.ModificacaoNaVariavel(linhas[i], V);
-						C.ComandoDeTela(linhas[i],V,Var);
+			} else {
+				do{
+					i = TOPO+1;
+					while(!linhas[i].startsWith("]f")){
+						i = I.VereficarLinha(linhas,V,i);
+						i++;
 					}
-					if(linhas[i].contains("]")) break;
-				}
-				Var.ModificacaoNaVariavel(Parte3, V);
-				OP.Expressoes(Parte2, V);
-			}while(OP.TokenComparativo);
+					Var.ModificacaoNaVariavel(Parte3, V);
+					OP.Expressoes(Parte2, V);
+				}while(OP.TokenComparativo);
+			}
 			TOPO = i;
 		}
 		return TOPO;
+	}
+	
+	public int IgnoraOutrosFors(String linhas[], int i){
+		if(linhas[i].startsWith("four")){
+			i++;
+			while(!linhas[i].startsWith("]f")){
+				i = IgnoraOutrosFors(linhas,i);
+				i++;
+			}
+		}
+		return i;
 	}
 
 	public int executaWhile(Variavel Var,String linha,String l[],Variavel V[], Operacao OP,Comandos Com,int p){

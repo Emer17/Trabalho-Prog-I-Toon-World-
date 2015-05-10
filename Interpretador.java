@@ -5,21 +5,22 @@
  * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Interpretador {
     private String linhas[];
-	public Variavel V[] = new Variavel[10]; 
-	
+
+	public Variavel V[] = new Variavel[100]; 
+
 	public void CriaVariavel(String l){
 		Variavel K = new Variavel();
 		for(int w =0; w < this.V.length; w++){
 			if(this.V[w] == null){
-				if(l.contains("Int")){
+				if(l.startsWith("Int ")){
 					if(K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_Valor(l,V),V));
 					else V[w] = new Inteiro(l,this.V);
 					break;
-				} else if(l.contains("Double")){
+				} else if(l.startsWith("Double ")){
 					if(K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_Valor(l,V),V));
 					else V[w] = new Doublee(l,this.V);
 					break;
-				} else if(l.contains("String")){
+				} else if(l.startsWith("String ")){
 					if (K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_ValorString(l),V));
 					else V[w] = new Stringg(l);
 					break;
@@ -27,36 +28,57 @@ class Interpretador {
 			}
 		}
 	}
-
-	public void corrige(String l[]){//este bloco corrige o problema de "espaços duplicados"
+	
+	public void corrige(String l[]){
 		String linhas_corrigidas[];
+		String [] frase;
 		linhas_corrigidas = l;
 		String Nlinha = new String();
-		for(int i = 0; i < linhas_corrigidas.length;/*this.linhas.length;*/ i++){
+		int x = 0;
+		for(int i = 0; i < linhas_corrigidas.length; i++){
 			if(linhas_corrigidas[i] != null){
-				linhas_corrigidas[i] = linhas_corrigidas[i].replaceAll("\\s+"," ");
+				if(linhas_corrigidas[i].contains("\"") && linhas_corrigidas[i].contains("<)")){ //excluir espaços duplicados
+					frase = linhas_corrigidas[i].split("\"");									//FORA da string
+					frase[0] = frase[0].replaceAll("\\s+"," ");
+					frase[2] = frase[2].replaceAll("\\s+"," ");
+					frase[0] = frase[0].concat(frase[1]).concat(frase[2]);
+				}else{
+					linhas_corrigidas[i] = linhas_corrigidas[i].replaceAll("\\s+"," ");			//excluir espaço duplicado da linha toda.	
+				}
+				linhas_corrigidas[i] = linhas_corrigidas[i].trim();								//exclui tabs antes e depois da linha.
 				//System.out.println("Linha reescrita:" + linhas_corrigidas[i]);
 			}
 		}
 		interpreta(linhas_corrigidas);
 	}
-
-    public void interpreta(String l[]) {
+	
+	public int VereficarLinha(String linhas[], Variavel V[], int posicao){
+		
+		if ( linhas[posicao].startsWith("if") ){ // Condicao
+			Condicao C = new Condicao();
+			posicao = C.executaIf(V,linhas[posicao],posicao,linhas);
+		} else if ( linhas[posicao].startsWith("four") ){//For
+			Laco L = new Laco();
+			posicao = L.four(V,linhas[posicao],posicao,linhas);
+		/*} else if ( linhas[posicao].startsWith("while") ){//While
+			Laco L = new Laco();
+			posicao = L.executaWhile(linhas[posicao],linhas,V,posicao);*/
+		} else if ( linhas[posicao].startsWith("print") || linhas[posicao].startsWith("ler") ){
+			Comandos C = new Comandos();
+			C.ComandoDeTela(linhas[posicao],V);
+		} else { //Criação, atribuição, mais_mais e menos_menos, em VARIAVEIS.
+			Variavel Var = new Variavel();
+			CriaVariavel(linhas[posicao]);
+			Var.ModificacaoNaVariavel(linhas[posicao], V);
+		}
+		return posicao;
+	}
+	
+     public void interpreta(String l[]) {
         this.linhas = l;
-		Condicao Con = new Condicao();		
-		Operacao OP = new Operacao();
-		Variavel Var = new Variavel();
-		Laco U = new Laco();
-		Comandos C = new Comandos();
 		for(int i = 0; i < this.linhas.length; i++) {
-            if(this.linhas[i] != null) {
-				i = U.four(V,Var,OP,l[i],i,l,C);
-				i = Con.executaIf(Var,linhas[i],l,V,OP,C,i);
-				i = U.executaWhile(Var,linhas[i],l,V,OP,C,i);
-				CriaVariavel(linhas[i]);
-				Var.ModificacaoNaVariavel(linhas[i], V);
-				C.ComandoDeTela(linhas[i],V,Var);
-				
+            if(this.linhas[i] != null) {			
+				i = VereficarLinha(l,V,i);				
 			}
 		}
 		System.out.println("=================================");
