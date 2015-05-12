@@ -4,7 +4,6 @@
  * Versão: 1.0
  * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Interpretador {
-    private String linhas[];
 
 	public Variavel V[] = new Variavel[100]; 
 
@@ -60,12 +59,15 @@ class Interpretador {
 		} else if ( linhas[posicao].startsWith("four") ){//For
 			Laco L = new Laco();
 			posicao = L.four(V,linhas[posicao],posicao,linhas);
-		/*} else if ( linhas[posicao].startsWith("while") ){//While
+		} else if ( linhas[posicao].startsWith("while") ){//While
 			Laco L = new Laco();
-			posicao = L.executaWhile(linhas[posicao],linhas,V,posicao);*/
-		} else if ( linhas[posicao].startsWith("print") || linhas[posicao].startsWith("ler") ){
+			posicao = L.executaWhile(V,linhas[posicao],posicao,linhas);
+		} else if ( linhas[posicao].startsWith("ler") ){
 			Comandos C = new Comandos();
-			C.ComandoDeTela(linhas[posicao],V);
+			C.Scanf(linhas[posicao],V);
+		} else if ( linhas[posicao].startsWith("print") || linhas[posicao].startsWith("println") ){
+			Comandos C = new Comandos();
+			C.Imprimir(linhas[posicao],V);
 		} else { //Criação, atribuição, mais_mais e menos_menos, em VARIAVEIS.
 			Variavel Var = new Variavel();
 			CriaVariavel(linhas[posicao]);
@@ -74,11 +76,10 @@ class Interpretador {
 		return posicao;
 	}
 	
-     public void interpreta(String l[]) {
-        this.linhas = l;
-		for(int i = 0; i < this.linhas.length; i++) {
-            if(this.linhas[i] != null) {			
-				i = VereficarLinha(l,V,i);				
+     public void interpreta(String linhas[]) {
+		for(int i = 0; i < linhas.length; i++) {
+            if(linhas[i] != null) {			
+				i = VereficarLinha(linhas,V,i);				
 			}
 		}
 		System.out.println("=================================");

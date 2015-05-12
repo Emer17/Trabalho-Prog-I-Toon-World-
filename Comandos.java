@@ -1,20 +1,19 @@
+/* Nome : Interpretador.java
+ * Autores: Emerson Martins  <emer-martins@hotmail.com>
+ * 			Leonardo Vargas  <leu1607@hotmail.com>
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 import java.util.Scanner;
 class Comandos{
-	public void ComandoDeTela(String l, Variavel V[]){
+	public void Imprimir(String l, Variavel V[]){
 		int x = 0;
-		if(l.contains("print")){
-			String ImprimirLinha = "";
-			while(l.charAt(x) != '{') x++;
-			x++;
-			ImprimirLinha += print(l,V,x,ImprimirLinha);
-			System.out.println(ImprimirLinha);
-		}
-		if(l.contains("ler")){
-			Scanf(l,V,x);
-		}
+		while(l.charAt(x) != '{') x++;
+		x++;
+		if(l.startsWith("println")) System.out.println(ConcatenarFrases(l,V,x,""));
+		else System.out.print(ConcatenarFrases(l,V,x,""));
 	}
 	
-	public String print(String l, Variavel V[], int x, String ImprimirLinha){
+	public String ConcatenarFrases(String l, Variavel V[], int x, String ImprimirLinha){
 		String Conteudo = "";
 		Variavel Var = new Variavel();
 		boolean aspas = false;
@@ -23,7 +22,7 @@ class Comandos{
 			x++;
 		}
 		while(l.charAt(x) != '}'){
-			if(l.charAt(x) == '+' || l.charAt(x) == '}') break;
+			if(l.charAt(x) == '+') break;
 			else if(l.charAt(x) == '"');
 			else if(l.charAt(x) == ' '){
 				if(aspas) Conteudo += " ";
@@ -31,23 +30,24 @@ class Comandos{
 			x++;
 		}
 		ImprimirLinha += Var.LocalizarVariavel(Conteudo,V);
-		if(l.charAt(x) == '+') ImprimirLinha = print(l,V,x+1,ImprimirLinha);
+		if(l.charAt(x) == '+') ImprimirLinha = ConcatenarFrases(l,V,x+1,ImprimirLinha);
 		return ImprimirLinha;
 	}
 	
-	public void Scanf(String l, Variavel V[], int x){//ler(#NomeVariavel)
+	public void Scanf(String l, Variavel V[]){//ler(#NomeVariavel)
+		int x = 0;
+		String Nome = "";
+		Scanner scanner = new Scanner(System.in);
 		Variavel Var = new Variavel();
 		while(l.charAt(x) != '#') x++;
 		x++;
-		String Nome = "";
-		while(l.charAt(x) != ')'){
-			if(l.charAt(x) != ' ') Nome += l.charAt(x);
-			else if (l.charAt(x) == ' ' && (l.charAt(x+1) == ' ' || l.charAt(x+1) == ')'));
-			else Nome += " ";
+		if(l.charAt(x) == ' ') x++;
+		while(l.charAt(x) != '}'){
+			if(l.charAt(x) == ' ') break;
+			Nome += l.charAt(x);
 			x++;
 		}
 		System.out.println("Lendo para variavel ( " + Nome + " ) :");
-		Scanner scanner = new Scanner(System.in);
 		String valor = scanner.nextLine();
 		Var.Pesquisar(Nome,valor,V);
 	}

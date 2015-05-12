@@ -1,3 +1,8 @@
+/* Nome : Interpretador.java
+ * Autores: Emerson Martins  <emer-martins@hotmail.com>
+ * 			Leonardo Vargas  <leu1607@hotmail.com>
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Variavel{ 
 	
 	public String nome;
@@ -46,7 +51,7 @@ class Variavel{
 					if(V[w] instanceof Doublee){
 						V[w].valor = Double.valueOf(Valor).doubleValue();
 					} else if(V[w] instanceof Inteiro){
-						V[w].valor = Integer.parseInt(Valor);
+						V[w].valor = (int) Double.parseDouble(Valor);
 					} else if(V[w] instanceof Stringg){
 						V[w].valor += Valor;
 					}
@@ -117,8 +122,7 @@ class Variavel{
 					LinhaExp += l.charAt(x);
 					x++;
 				}
-				Exp.Expressoes(LinhaExp,V);
-				Valor = String.valueOf(Exp.Result);
+				Valor = String.valueOf(Exp.ExpressoesAritmeticas(LinhaExp,V));
 			} else {
 				while(l.charAt(x) != '?'){
 					if(l.charAt(x) == ' ') break; 

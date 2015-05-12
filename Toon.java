@@ -22,7 +22,6 @@ class Toon {
             linhas[i] = s.nextLine();
             i++;
         }
-        //b.corrige(linhas);
-        b.interpreta(linhas);
+		b.corrige(linhas);
     }
 }

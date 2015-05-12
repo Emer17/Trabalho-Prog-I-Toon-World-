@@ -1,3 +1,8 @@
+/* Nome : Interpretador.java
+ * Autores: Emerson Martins  <emer-martins@hotmail.com>
+ * 			Leonardo Vargas  <leu1607@hotmail.com>
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Laco{
 	public int four(Variavel V[], String l, int TOPO, String linhas[]){
 		int x = 0;
@@ -6,46 +11,42 @@ class Laco{
 		Variavel Var = new Variavel();
 		Interpretador I = new Interpretador();
 		Operacao OP = new Operacao();
-		if (l.startsWith("four")){
-			x = l.indexOf(123);
+		x = l.indexOf(123);
+		x++;
+		while(l.charAt(x-1) != '?'){
+			Parte1 += l.charAt(x);
 			x++;
-			while(l.charAt(x-1) != '?'){
-				Parte1 += l.charAt(x);
-				x++;
-			}
-			Var.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali. Termino da FASE 1 do for
-			while(l.charAt(x) == ' ') x++;
-			while(l.charAt(x) != '?'){
-				Parte2 += l.charAt(x);
-				x++;
-			}
+		}
+		Var.Atribuicao(Parte1, V);//Atribui o valor para a variavel colocada ali. Termino da FASE 1 do for
+		while(l.charAt(x) == ' ') x++;
+		while(l.charAt(x) != '?'){
 			Parte2 += l.charAt(x);
-			OP.Expressoes(Parte2, V);//Confere qual tipo de comparação eh. Termino da FASE 2 do for
 			x++;
-			while(l.charAt(x) == ' ') x++;
-			while(l.charAt(x) != '?'){
-				Parte3 += l.charAt(x);
-				x++;
+		}
+		Parte2 += l.charAt(x);//Confere qual tipo de comparação eh. Termino da FASE 2 do for
+		x++;
+		while(l.charAt(x) == ' ') x++;
+		while(l.charAt(x) != '?'){
+			Parte3 += l.charAt(x);
+			x++;
+		}
+		Parte3 += l.charAt(x);//Confere se eh MaisMais ou MenosMenos. Termino da FASE 3 do for
+		if(!OP.ExpressoesComparacao(Parte2, V)){
+			while(!linhas[i].startsWith("]f")){
+				i = IgnoraOutrosFors(linhas,i);
+				i++;
 			}
-			Parte3 += l.charAt(x);//Confere se eh MaisMais ou MenosMenos. Termino da FASE 3 do for
-			if(!OP.TokenComparativo){
+		} else {
+			do{
+				i = TOPO+1;
 				while(!linhas[i].startsWith("]f")){
-					i = IgnoraOutrosFors(linhas,i);
+					i = I.VereficarLinha(linhas,V,i);
 					i++;
 				}
-			} else {
-				do{
-					i = TOPO+1;
-					while(!linhas[i].startsWith("]f")){
-						i = I.VereficarLinha(linhas,V,i);
-						i++;
-					}
-					Var.ModificacaoNaVariavel(Parte3, V);
-					OP.Expressoes(Parte2, V);
-				}while(OP.TokenComparativo);
-			}
-			TOPO = i;
+				Var.ModificacaoNaVariavel(Parte3, V);
+			}while(OP.ExpressoesComparacao(Parte2, V));
 		}
+		TOPO = i;
 		return TOPO;
 	}
 	
@@ -59,45 +60,40 @@ class Laco{
 		}
 		return i;
 	}
-
-	public int executaWhile(Variavel Var,String linha,String l[],Variavel V[], Operacao OP,Comandos Com,int p){
-		int i = 0,x = 0;
-		String teste ="";
-		if(linha != null){
-			if(linha.contains("while")){
-				x = p+1; //agora x tem a linha de inicio
-				while(linha.charAt(i) != '{'){
-					i++;
-				}
+	public int IgnoraOutroswhile(String linhas[], int i){
+		if(linhas[i].startsWith("while")){
+			i++;
+			while(!linhas[i].startsWith("]w")){
+				i = IgnoraOutroswhile(linhas,i);
 				i++;
-				while(linha.charAt(i-1) != '}'){
-					teste += linha.charAt(i);
-					i++;
-				}		
-				p++;
-				OP.Expressoes(teste,V);
-				if(OP.TokenComparativo){
-					do{
-						p = x; //volta pro inicio
-						while(!l[p].contains("]")){
-							//V.CriaVariavel(l[p],V);
-							Var.ModificacaoNaVariavel(l[p],V);						
-							Com.ComandoDeTela(l[p],V,Var);
-							p = executaWhile(Var,l[p],l,V,OP,Com,p);
-							p = four(V,Var,OP,l[p],p,l,Com);
-							p++;
-						}
-						OP.Expressoes(teste,V);
-					}while(OP.TokenComparativo);
-				}else{
-					while(!l[p].contains("]")){
-						p++;
-					}
-					return p;
-				}				
 			}
 		}
-		return p;
+		return i;
 	}
-			
+
+	public int executaWhile(Variavel V[], String linha, int TOPO, String linhas[]){
+		int i = TOPO+1;
+		Interpretador I = new Interpretador();
+		Operacao OP = new Operacao();
+		String ExprecaoWhile = "";
+		ExprecaoWhile = linha.replaceAll(" ", ""); // Remove os espaços ;
+		ExprecaoWhile = ExprecaoWhile.replaceAll("while\\{", ""); // So copia a expreção por Exemplo : Antes-> while{a<<b}[    Depois-> {a<<b}[;
+		i++; // Avança para linha de baixo do WHILE;
+		if(!OP.ExpressoesComparacao(ExprecaoWhile, V)){
+			while(!linhas[i].startsWith("]w")){
+				i = IgnoraOutroswhile(linhas,i);
+				i++;
+			}
+		}else{
+			do{
+				i = TOPO+1;
+				while(!linhas[i].startsWith("]w")){
+					i = I.VereficarLinha(linhas,V,i);
+					i++;
+				}
+			}while(OP.ExpressoesComparacao(ExprecaoWhile, V));
+		}
+		TOPO = i;
+		return TOPO;
+	}
 }
