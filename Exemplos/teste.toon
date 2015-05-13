@@ -1,0 +1,14 @@
+Int num?
+Double quant?
+Double resul?
+while{num =|= 100}[
+	resul <) resul + num?
+	println{"digite um numero :"}?
+	ler{#num}?
+	quant...?
+]w
+quant,,,?
+println{"Total "+ "somatori: " + resul}?
+println{"Dividido por: " + quant}?
+resul <) resul/quant?
+println{"Resultado : " + resul}?
