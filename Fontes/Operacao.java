@@ -1,12 +1,15 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 5.0
- * Descrição: Classe Operação da Toon World, linguagem baseada em java.
- * 
- * Esta classe é responsavel pela verificação dos tipos de Tokens usados na linguagem.*/
- 
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Operacao{
+	
+	private Interpretador Inter;
+	
+	public Operacao(Interpretador I){
+		Inter = I;
+	}
 	
 	public double OperacaoAritmetica(char Token, double A, double B){
 		if(Token == '+') return A + B;
@@ -81,30 +84,29 @@ class Operacao{
 		return false;
 	}
 	
-	public double TransformaEmDouble(String Valor, Variavel V[]){
-		Variavel J = new Variavel();
-		return Double.valueOf(J.LocalizarVariavel(Valor,V)).doubleValue();
+	public double TransformaEmDouble(String Valor){
+		return Double.valueOf(Inter.LocalizarVariavel(Valor)).doubleValue();
 	}
 	
-	public String ExpComComparacao(String l, Variavel V[]){
-		if(TokensAritmeticos(l) != '0') return String.valueOf(ExpressoesAritmeticas(l,V));
+	public String ExpComComparacao(String l){
+		if(TokensAritmeticos(l) != '0') return String.valueOf(ExpressoesAritmeticas(l));
 		return l;
 	}
 	
-	public boolean ExpressoesComparacao(String l, Variavel V[]){
+	public boolean ExpressoesComparacao(String l){
 		String Teste = "";
 		int x = 0, ponto = 2;
-		Teste = l.replaceAll(" ", ""); // Remove os espaços ;
+		Teste = l.replaceAll("[  \\?]", ""); // Remove os espaços ;
 		Teste = Teste.replaceAll("[\\<\\>\\=\\|]", ".");
 		Teste = Teste.replaceAll("\\}\\[", "");
 		if(Teste.contains("...")) ponto++;
 		String[] vet = Teste.split("\\.");
-		return VereficaComparacao(l,TransformaEmDouble(ExpComComparacao(vet[0],V),V),TransformaEmDouble(ExpComComparacao(vet[ponto],V),V));
+		return VereficaComparacao(l,TransformaEmDouble(ExpComComparacao(vet[0])),TransformaEmDouble(ExpComComparacao(vet[ponto])));
 	}
 	
-	public double ExpressoesAritmeticas(String l, Variavel V[]){
+	public double ExpressoesAritmeticas(String l){
 		l = l.replaceAll(" ", "");
 		String[] vet = l.split("[^a-z,^0-9,^A-Z]");
-		return OperacaoAritmetica(TokensAritmeticos(l),TransformaEmDouble(vet[0],V),TransformaEmDouble(vet[1],V));
+		return OperacaoAritmetica(TokensAritmeticos(l),TransformaEmDouble(vet[0]),TransformaEmDouble(vet[1]));
 	}
 }

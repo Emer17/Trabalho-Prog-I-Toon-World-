@@ -1,24 +1,27 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 5.0
- * Descrição: Classe Comandos da Toon World, linguagem baseada em java.
- * 
- * Esta classe é responsavel pelos comandos "print" e "ler" da linguagem.*/
- 
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 import java.util.Scanner;
 class Comandos{
-	public void Imprimir(String l, Variavel V[]){
+	
+	private Interpretador Inter;
+	
+	public Comandos(Interpretador I){
+		Inter = I;
+	}
+	
+	public void Imprimir(String l){
 		int x = 0;
 		while(l.charAt(x) != '{') x++;
 		x++;
-		if(l.startsWith("println")) System.out.println(ConcatenarFrases(l,V,x,""));
-		else System.out.print(ConcatenarFrases(l,V,x,""));
+		if(l.startsWith("println")) System.out.println(ConcatenarFrases(l,x,""));
+		else System.out.print(ConcatenarFrases(l,x,""));
 	}
 	
-	public String ConcatenarFrases(String l, Variavel V[], int x, String ImprimirLinha){
+	public String ConcatenarFrases(String l,int x, String ImprimirLinha){
 		String Conteudo = "";
-		Variavel Var = new Variavel();
 		boolean aspas = false;
 		if(l.charAt(x) == '"'){
 			aspas = true;
@@ -32,16 +35,15 @@ class Comandos{
 			} else Conteudo += l.charAt(x);
 			x++;
 		}
-		ImprimirLinha += Var.LocalizarVariavel(Conteudo,V);
-		if(l.charAt(x) == '+') ImprimirLinha = ConcatenarFrases(l,V,x+1,ImprimirLinha);
+		ImprimirLinha += Inter.LocalizarVariavel(Conteudo);
+		if(l.charAt(x) == '+') ImprimirLinha = ConcatenarFrases(l,x+1,ImprimirLinha);
 		return ImprimirLinha;
 	}
 	
-	public void Scanf(String l, Variavel V[]){//ler(#NomeVariavel)
+	public void Scanf(String l){//ler(#NomeVariavel)
 		int x = 0;
 		String Nome = "";
 		Scanner scanner = new Scanner(System.in);
-		Variavel Var = new Variavel();
 		while(l.charAt(x) != '#') x++;
 		x++;
 		if(l.charAt(x) == ' ') x++;
@@ -52,6 +54,6 @@ class Comandos{
 		}
 		System.out.println("Lendo para variavel ( " + Nome + " ) :");
 		String valor = scanner.nextLine();
-		Var.Pesquisar(Nome,valor,V);
+		Inter.Pesquisar(Nome,valor);
 	}
 }

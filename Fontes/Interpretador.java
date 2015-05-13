@@ -1,30 +1,39 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 5.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.
- * 
- * Esta classe é responsavel pela criação de variaveis,correção das linhas e interpretação dos comandos da linguagem.*/
- 
+ * Versão: 1.0
+ * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
 class Interpretador {
 
-	public Variavel V[] = new Variavel[100]; 
+	public Variavel V[]; 
+	public Condicao Condicao; 
+	public Laco Laco;
+	public Comandos Comandos;
+	public String linhas[];
+	public Operacao Operacao;
 
+	public Interpretador() {
+		V = new Variavel[100];
+		Condicao = new Condicao(this);
+		Laco = new Laco(this);
+		Comandos = new Comandos(this);	
+		Operacao = new Operacao(this);
+	}
+	
 	public void CriaVariavel(String l){
-		Variavel K = new Variavel();
-		for(int w =0; w < this.V.length; w++){
+		for(int w =0; w < V.length; w++){
 			if(this.V[w] == null){
 				if(l.startsWith("Int ")){
-					if(K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_Valor(l,V),V));
-					else V[w] = new Inteiro(l,this.V);
+					if(Pesquisar(Pegar_Nome(l),Pegar_Valor(l)));
+					else V[w] = new Inteiro(Pegar_Nome(l),Pegar_Valor(l));
 					break;
 				} else if(l.startsWith("Double ")){
-					if(K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_Valor(l,V),V));
-					else V[w] = new Doublee(l,this.V);
+					if(Pesquisar(Pegar_Nome(l),Pegar_Valor(l)));
+					else V[w] = new Doublee(Pegar_Nome(l),Pegar_Valor(l));
 					break;
 				} else if(l.startsWith("String ")){
-					if (K.Pesquisar(K.Pegar_Nome(l,true),K.Pegar_ValorString(l),V));
-					else V[w] = new Stringg(l);
+					if (Pesquisar(Pegar_Nome(l),Pegar_ValorString(l)));
+					else V[w] = new Stringg(Pegar_Nome(l),Pegar_ValorString(l));
 					break;
 				}
 			}
@@ -50,51 +59,174 @@ class Interpretador {
 				if(!(linhas_corrigidas[i].startsWith("print"))){  //excluir espaço duplicado da linha toda.(se ela nao for um print!)
 					linhas_corrigidas[i] = linhas_corrigidas[i].replaceAll("\\s+"," ");	//mesma funçao ali de cima, agora com a linha toda.			
 				}
-				//System.out.println("Linha reescrita:" + linhas_corrigidas[i]); //quer ver a linha reescrita?
 			}
 		}
 		if(log.VerificaErros(linhas_corrigidas)) interpreta(linhas_corrigidas);
 	}
 	
-	public int VereficarLinha(String linhas[], Variavel V[], int posicao){
+	public int ControleDeLinha(int posicao){
 		
 		if ( linhas[posicao].startsWith("if") ){ // Condicao
-			Condicao C = new Condicao();
-			posicao = C.executaIf(V,linhas[posicao],posicao,linhas);
+			posicao = Condicao.executaIf(posicao);
 		} else if ( linhas[posicao].startsWith("four") ){//For
-			Laco L = new Laco();
-			posicao = L.four(V,linhas[posicao],posicao,linhas);
+			posicao = Laco.four(posicao);
 		} else if ( linhas[posicao].startsWith("while") ){//While
-			Laco L = new Laco();
-			posicao = L.executaWhile(V,linhas[posicao],posicao,linhas);
+			posicao = Laco.executaWhile(posicao);
 		} else if ( linhas[posicao].startsWith("ler") ){
-			Comandos C = new Comandos();
-			C.Scanf(linhas[posicao],V);
+			Comandos.Scanf(linhas[posicao]);
 		} else if ( linhas[posicao].startsWith("print") || linhas[posicao].startsWith("println") ){
-			Comandos C = new Comandos();
-			C.Imprimir(linhas[posicao],V);
+			Comandos.Imprimir(linhas[posicao]);
+		} else if (linhas[posicao].startsWith("LadoEscuro") ){
+			LadoEscuro(linhas[posicao]);
 		} else { //Criação, atribuição, mais_mais e menos_menos, em VARIAVEIS.
-			Variavel Var = new Variavel();
 			CriaVariavel(linhas[posicao]);
-			Var.ModificacaoNaVariavel(linhas[posicao], V);
+			ModificacaoNaVariavel(linhas[posicao]);
 		}
 		return posicao;
 	}
 	
-     public void interpreta(String linhas[]) {
-		for(int i = 0; i < linhas.length; i++) {
-            if(linhas[i] != null) {			
-				i = VereficarLinha(linhas,V,i);				
+	public String Pegar_Valor(String l){
+		String Valor = "";
+		l = l.replaceAll(" ", "");
+		String[] vet = l.split("\\<\\)");
+		if(!l.contains("<)")){
+			Valor += '0';
+		} else {		
+			if(Operacao.TokensAritmeticos(l) != '0' || !Operacao.TokenComparativos(l).equals("")){
+				Valor = String.valueOf(Operacao.ExpressoesAritmeticas(vet[1]));
+			} else {
+				vet[1] = vet[1].replaceAll("\\?", "");
+				Valor = LocalizarVariavel(vet[1]);
 			}
 		}
-		System.out.println("=================================");
-		System.out.println("        Vetor de Variaveis");
-		System.out.println("=================================");
+		return Valor;
+	}
+	
+	public void LadoEscuro(String l){
+		if(l.contains(",")){
+			l = l.replaceAll("LadoEscuro", "");
+			l = l.replaceAll("[ \\{\\}\\?]", "");
+			String[] Nomes = l.split(",");
+			for(int w = 0; w < Nomes.length; w++){
+				for(int a = 0; a < V.length; a++){
+					if(V[a] != null){
+						if(V[a].nome.equals(Nomes[w])){
+							System.out.println("[ " + a + " ] Nome Variavel : " + V[a].nome); 
+							System.out.println("      Conteudo : " +  V[a].valor);
+							System.out.println();
+						}
+					}
+				}
+			}
+		} else {
+			for(int w = 0; w < V.length; w++){
+				if (V[w] != null){
+					System.out.println("[ " + w + " ] Nome Variavel : " + V[w].nome); 
+					System.out.println("      Conteudo : " +  V[w].valor);
+					System.out.println();
+				}
+			}
+		}
+	}
+	
+	public void MaisMais_E_MenosMenos(String l){
+		String Nome = l.replaceAll("[ \\.\\,\\?]", "");
 		for(int w = 0; w < V.length; w++){
-			if (V[w] != null){
-				System.out.println( w + " <- Posicao ");
-				System.out.println("             ->> Nome : " + V[w].nome);
-				System.out.println("             ->> Conteudo : " + V[w].valor);
+			if(V[w] != null){
+				if(V[w].nome.equals(Nome)){
+					if(V[w] instanceof Doublee){
+						double valor = (double) V[w].valor;
+						if(l.contains("...")) V[w].valor = valor + 1;
+						else V[w].valor = valor - 1;
+					} else if(V[w] instanceof Inteiro){
+						int valor = (int) V[w].valor;
+						if(l.contains("...")) V[w].valor = valor + 1;
+						else V[w].valor = valor - 1;
+					}					
+				}
+			}
+		}
+	}
+	
+	public void ModificacaoNaVariavel(String l){
+		if(l.contains("...") || l.contains(",,,")){
+			MaisMais_E_MenosMenos(l);
+		} else if(l.contains("<)")){
+			Atribuicao(l);
+		} else if(l.contains("<+)")){
+			ConcatenarString(l);
+		}
+	}
+	
+	public void ConcatenarString(String l){
+		Pesquisar(Pegar_Nome(l),Pegar_ValorString(l));
+	}
+	
+	public void Atribuicao(String l){
+		Pesquisar(Pegar_Nome(l),Pegar_Valor(l));
+	}
+	
+	public boolean Pesquisar(String Nome, String Valor){
+		for(int w = 0; w < V.length; w++){
+			if(V[w] != null){
+				if(V[w].nome.equals(Nome)){
+					if(V[w] instanceof Doublee){
+						V[w].valor = Double.valueOf(Valor).doubleValue();
+					} else if(V[w] instanceof Inteiro){
+						V[w].valor = (int) Double.parseDouble(Valor);
+					} else if(V[w] instanceof Stringg){
+						V[w].valor += Valor;
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public String LocalizarVariavel(String Nome){
+		for(int w = 0; w < V.length; w++){
+			if(V[w] != null){
+				if(V[w].nome.equals(Nome)){
+					return String.valueOf(V[w].valor);
+				}
+			}
+		}
+		return Nome;
+	}
+	
+	public String Pegar_ValorString(String l){
+		int x = 0;
+		String Valor = "";
+		while(l.charAt(x) != '"') x++;
+		x++;
+		while(l.charAt(x) != '"'){
+			Valor += l.charAt(x);
+			x++;
+		}
+		return Valor;
+	}
+	
+	public String Pegar_Nome(String l){
+		int a = 0;
+		if(l.startsWith("Int ") || l.startsWith("String ") || l.startsWith("Double ")) a = 1;
+		l = l.replaceAll("[\\<\\)\\?]", " ");
+		String[] vet = l.split(" ");
+		return vet[a];
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+     public void interpreta(String l[]) {
+		 this.linhas = l;
+		for(int posicao = 0; posicao < linhas.length; posicao++) {
+            if(linhas[posicao] != null) {			
+				posicao = ControleDeLinha(posicao);				
 			}
 		}
 	}
