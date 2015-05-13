@@ -1,8 +1,11 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 1.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
+ * Versão: 5.0
+ * Descrição: Classe Comandos da Toon World, linguagem baseada em java.
+ * 
+ * Esta classe é responsavel pelos comandos "print" e "ler" da linguagem.*/
+ 
 import java.util.Scanner;
 class Comandos{
 	public void Imprimir(String l, Variavel V[]){

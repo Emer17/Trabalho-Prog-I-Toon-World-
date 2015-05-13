@@ -1,8 +1,10 @@
 /* Nome : Toon.java (representa Main.java)
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 1.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
+ * Versão: 5.0
+ * Descrição: Classe Toon da Toon World, linguagem baseada em java.
+ * 
+ * Esta classe funciona como a "Main". Ela é responsavel pelo inicio da execução do programa.*/
  
 import java.util.Scanner;
 import java.io.*;

@@ -1,8 +1,11 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 1.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
+ * Versão: 5.0
+ * Descrição: Classe Laço da Toon World, linguagem baseada em java.
+ * 
+ * Esta classe é responsavel pelos comandos "four" e "while" da linguagem.*/
+ 
 class Laco{
 	public int four(Variavel V[], String l, int TOPO, String linhas[]){
 		int x = 0;
