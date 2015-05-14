@@ -1,0 +1,16 @@
+Int oque?
+Double resul?
+Int Total?
+GIRAGIRA { oque |= 100 }[
+	resul <) resul + num ?
+	PRINTLN {"Digite um numero :"}?
+	DIZPRAMIM { #oque }?
+	WENN { oque |= 100 }[
+		Total ++?
+	]W	
+]G
+resul <) resul / Total?
+PRINTLN {"Sua media eh : " + resul}?
+resul ++?
+Total ++?
+DARKSIDE{}?

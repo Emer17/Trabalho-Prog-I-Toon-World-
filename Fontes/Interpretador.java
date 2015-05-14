@@ -1,8 +1,10 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 1.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
+- * Versão: 5.0
+- * Descrição: Classe Main da Toon World, linguagem baseada em java.
+- * 
+- * Esta classe é responsavel pela criação de variaveis,correção das linhas e interpretação dos comandos da linguagem.*/
 class Interpretador {
 
 	public Variavel V[]; 
@@ -22,17 +24,17 @@ class Interpretador {
 	
 	public void CriaVariavel(String l){
 		for(int w =0; w < V.length; w++){
-			if(this.V[w] == null){
-				if(l.startsWith("Int ")){
-					if(Pesquisar(Pegar_Nome(l),Pegar_Valor(l)));
+			if(this.V[w] == null){// Acha o primeiro indice que não estaja ocupado.
+				if(l.startsWith("Int ")){// Se for a criação de um INT.
+					if(AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l)));// Pesquisa se a variavel ja existe, caso ja tenha uma com o mesmo nome ele subscreve ela.
 					else V[w] = new Inteiro(Pegar_Nome(l),Pegar_Valor(l));
 					break;
-				} else if(l.startsWith("Double ")){
-					if(Pesquisar(Pegar_Nome(l),Pegar_Valor(l)));
+				} else if(l.startsWith("Double ")){// Se for a criação de um DOUBLE.
+					if(AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l)));
 					else V[w] = new Doublee(Pegar_Nome(l),Pegar_Valor(l));
 					break;
-				} else if(l.startsWith("String ")){
-					if (Pesquisar(Pegar_Nome(l),Pegar_ValorString(l)));
+				} else if(l.startsWith("String ")){// Se for a criação de uma STRING.
+					if (AlteraVariavel(Pegar_Nome(l),Pegar_ValorString(l)));
 					else V[w] = new Stringg(Pegar_Nome(l),Pegar_ValorString(l));
 					break;
 				}
@@ -61,23 +63,23 @@ class Interpretador {
 				}
 			}
 		}
-		if(log.VerificaErros(linhas_corrigidas)) interpreta(linhas_corrigidas);
+		if(log.VerificaErros(linhas_corrigidas)) 
+		interpreta(linhas_corrigidas);
 	}
 	
 	public int ControleDeLinha(int posicao){
-		
-		if ( linhas[posicao].startsWith("if") ){ // Condicao
-			posicao = Condicao.executaIf(posicao);
-		} else if ( linhas[posicao].startsWith("four") ){//For
-			posicao = Laco.four(posicao);
-		} else if ( linhas[posicao].startsWith("while") ){//While
-			posicao = Laco.executaWhile(posicao);
-		} else if ( linhas[posicao].startsWith("ler") ){
-			Comandos.Scanf(linhas[posicao]);
-		} else if ( linhas[posicao].startsWith("print") || linhas[posicao].startsWith("println") ){
-			Comandos.Imprimir(linhas[posicao]);
-		} else if (linhas[posicao].startsWith("LadoEscuro") ){
-			LadoEscuro(linhas[posicao]);
+		if ( linhas[posicao].startsWith("WENN") ){ //If. Vem da linguagem Alemão.
+			posicao = Condicao.ExecutaIF(posicao);
+		} else if ( linhas[posicao].startsWith("VOOR") ){//For. Vem da linguagem Holandesa.
+			posicao = Laco.ExecutaFor(posicao);
+		} else if ( linhas[posicao].startsWith("GIRAGIRA") ){//While.
+			posicao = Laco.ExecutaWHILE(posicao);
+		} else if ( linhas[posicao].startsWith("DIZPRAMIM") ){//Scanf.
+			Comandos.ExecutaSCANF(linhas[posicao]);
+		} else if ( linhas[posicao].startsWith("PRINT") || linhas[posicao].startsWith("PRINTLN") ){//Print.
+			Comandos.ExecutaPRINT(linhas[posicao]);
+		} else if (linhas[posicao].startsWith("DARKSIDE") ){//Imprimi a memoria.
+			Darkside(linhas[posicao]);
 		} else { //Criação, atribuição, mais_mais e menos_menos, em VARIAVEIS.
 			CriaVariavel(linhas[posicao]);
 			ModificacaoNaVariavel(linhas[posicao]);
@@ -86,26 +88,24 @@ class Interpretador {
 	}
 	
 	public String Pegar_Valor(String l){
-		String Valor = "";
-		l = l.replaceAll(" ", "");
-		String[] vet = l.split("\\<\\)");
-		if(!l.contains("<)")){
-			Valor += '0';
-		} else {		
-			if(Operacao.TokensAritmeticos(l) != '0' || !Operacao.TokenComparativos(l).equals("")){
-				Valor = String.valueOf(Operacao.ExpressoesAritmeticas(vet[1]));
-			} else {
-				vet[1] = vet[1].replaceAll("\\?", "");
-				Valor = LocalizarVariavel(vet[1]);
-			}
+		if(!l.contains("<)")){// Caso seja so uma variavel sem valor. Exemplo: Double j?
+			return "0";// Retorna o valor ZERO para a variavel que esta sendo criada.
 		}
-		return Valor;
+		l = l.replaceAll(" ", "");//Retira todos os espaços.
+		String[] Valor = l.split("\\<\\)");// Separa o valor do nome. Exemplo: Int K <) 78 - A?, no Valor[1] vai conter 78 - A?		
+		if(Operacao.TokensAritmeticos(l) != '0'){// Caso retornar diferente de ZERO, quer dizer que existe uma operação aritmerica.
+			Valor[1] = String.valueOf(Operacao.ExpressoesAritmeticas(Valor[1]));// Faz a operação e retorna o valor.
+		} else {
+			Valor[1] = Valor[1].replaceAll("\\?", "");// Se existir um numero ou uma variavel.
+			Valor[1] = LocalizarVariavel(Valor[1]);// Se tiver uma variavel vai retornar o valor dela.
+		}
+		return Valor[1];
 	}
 	
-	public void LadoEscuro(String l){
-		if(l.contains(",")){
-			l = l.replaceAll("LadoEscuro", "");
-			l = l.replaceAll("[ \\{\\}\\?]", "");
+	public void Darkside(String l){
+		if(l.contains(",")){// Quando quiser imprimir variaveis especificas.
+			l = l.replaceAll("DARKSIDE", "");// Retira a palavra.
+			l = l.replaceAll("[ \\{\\}\\?]", "");// Retira esses caracateres.
 			String[] Nomes = l.split(",");
 			for(int w = 0; w < Nomes.length; w++){
 				for(int a = 0; a < V.length; a++){
@@ -130,18 +130,18 @@ class Interpretador {
 	}
 	
 	public void MaisMais_E_MenosMenos(String l){
-		String Nome = l.replaceAll("[ \\.\\,\\?]", "");
+		int Somar = 1;
+		if(l.contains("--")) Somar = (-1);
+		String Nome = l.replaceAll("[ \\+\\-\\?]", "");
 		for(int w = 0; w < V.length; w++){
 			if(V[w] != null){
 				if(V[w].nome.equals(Nome)){
 					if(V[w] instanceof Doublee){
 						double valor = (double) V[w].valor;
-						if(l.contains("...")) V[w].valor = valor + 1;
-						else V[w].valor = valor - 1;
+						V[w].valor = valor + Somar;
 					} else if(V[w] instanceof Inteiro){
-						int valor = (int) V[w].valor;
-						if(l.contains("...")) V[w].valor = valor + 1;
-						else V[w].valor = valor - 1;
+						int valor = (int) V[w].valor;						
+						V[w].valor = valor + Somar;
 					}					
 				}
 			}
@@ -149,7 +149,7 @@ class Interpretador {
 	}
 	
 	public void ModificacaoNaVariavel(String l){
-		if(l.contains("...") || l.contains(",,,")){
+		if(l.contains("++") || l.contains("--")){
 			MaisMais_E_MenosMenos(l);
 		} else if(l.contains("<)")){
 			Atribuicao(l);
@@ -159,14 +159,14 @@ class Interpretador {
 	}
 	
 	public void ConcatenarString(String l){
-		Pesquisar(Pegar_Nome(l),Pegar_ValorString(l));
+		AlteraVariavel(Pegar_Nome(l),Pegar_ValorString(l));
 	}
 	
 	public void Atribuicao(String l){
-		Pesquisar(Pegar_Nome(l),Pegar_Valor(l));
+		AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l));
 	}
 	
-	public boolean Pesquisar(String Nome, String Valor){
+	public boolean AlteraVariavel(String Nome, String Valor){
 		for(int w = 0; w < V.length; w++){
 			if(V[w] != null){
 				if(V[w].nome.equals(Nome)){
@@ -214,13 +214,6 @@ class Interpretador {
 		String[] vet = l.split(" ");
 		return vet[a];
 	}
-	
-	
-	
-	
-	
-	
-	
 	
      public void interpreta(String l[]) {
 		 this.linhas = l;

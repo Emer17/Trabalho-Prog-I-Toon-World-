@@ -1,8 +1,10 @@
 /* Nome : Interpretador.java
  * Autores: Emerson Martins  <emer-martins@hotmail.com>
  * 			Leonardo Vargas  <leu1607@hotmail.com>
- * Versão: 1.0
- * Descrição: Classe Main da Toon World, linguagem baseada em java.*/
+- * Versão: 5.0
+- * Descrição: Classe Comandos da Toon World, linguagem baseada em java.
+- * 
+- * Esta classe é responsavel pelos comandos "print" e "scanf" da linguagem.*/
 import java.util.Scanner;
 class Comandos{
 	
@@ -12,11 +14,11 @@ class Comandos{
 		Inter = I;
 	}
 	
-	public void Imprimir(String l){
+	public void ExecutaPRINT(String l){
 		int x = 0;
 		while(l.charAt(x) != '{') x++;
 		x++;
-		if(l.startsWith("println")) System.out.println(ConcatenarFrases(l,x,""));
+		if(l.startsWith("PRINTLN")) System.out.println(ConcatenarFrases(l,x,""));
 		else System.out.print(ConcatenarFrases(l,x,""));
 	}
 	
@@ -40,7 +42,7 @@ class Comandos{
 		return ImprimirLinha;
 	}
 	
-	public void Scanf(String l){//ler(#NomeVariavel)
+	public void ExecutaSCANF(String l){//ler(#NomeVariavel)
 		int x = 0;
 		String Nome = "";
 		Scanner scanner = new Scanner(System.in);
@@ -52,8 +54,7 @@ class Comandos{
 			Nome += l.charAt(x);
 			x++;
 		}
-		System.out.println("Lendo para variavel ( " + Nome + " ) :");
 		String valor = scanner.nextLine();
-		Inter.Pesquisar(Nome,valor);
+		Inter.AlteraVariavel(Nome,valor);
 	}
 }
