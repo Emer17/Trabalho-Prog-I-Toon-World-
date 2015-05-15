@@ -16,10 +16,10 @@ class Comandos{
 	
 	public void ExecutaPRINT(String l){
 		if(l.startsWith("PRINTLN")){ 
-			l = l.replaceAll("PRINTLN", "");
+			l = l.replaceAll("PRINTLN", "");// Retira a palavra PRINTLN.
 			System.out.println(ConcatenarFrases(l));
 		} else {
-			l = l.replaceAll("PRINT", "");
+			l = l.replaceAll("PRINT", "");// Retira a palavra PRINT.
 			System.out.print(ConcatenarFrases(l));
 		}
 	}
@@ -29,24 +29,24 @@ class Comandos{
 		l = l.replaceAll("[\\{\\}\\?]", "");// Retira esses caracteres.
 		String[] Imprimir = l.split("\\+");//Quebras os indices nos mais encontradas.
 		for(int w = 0; w < Imprimir.length; w++){// Anda pelo vetor de nomes.
-			if(!Imprimir[w].contains("\"")){
-				Imprimir[w] = Imprimir[w].replaceAll(" ", "");
-				Imprimir[w] = Inter.LocalizarVariavel(Imprimir[w]);
+			if(!Imprimir[w].contains("\"")){// Entra se for uma variavel.
+				Imprimir[w] = Imprimir[w].replaceAll(" ", "");// Retira os espaços.
+				Imprimir[w] = Inter.LocalizarVariavel(Imprimir[w]);// Pesquisa ela e retorna seu valor.
 			} else {
-				Imprimir[w] = Imprimir[w].replaceAll("\"", "");
+				Imprimir[w] = Imprimir[w].replaceAll("\"", "");// Se for uma frase so retira as aspas.
 			}
 			ImprimirLinha += Imprimir[w];
 		}
 		return ImprimirLinha;
 	}
 	
-	public void ExecutaSCANF(String l){
+	public void ExecutaSCANF(String l){//DIZPRAMIM(#NomeVariavel)?
 		int x = 0;
 		String Nome = "";
 		Scanner scanner = new Scanner(System.in);
-		while(l.charAt(x) != '#') x++;
-		x++;
-		if(l.charAt(x) == ' ') x++;
+		while(l.charAt(x) != '#') x++;// Vai ate o #.
+		x++;// X esta valendo o proximo caracter.
+		if(l.charAt(x) == ' ') x++;// Enquanto ser diferente de espaço
 		while(l.charAt(x) != '}'){
 			if(l.charAt(x) == ' ') break;
 			Nome += l.charAt(x);
