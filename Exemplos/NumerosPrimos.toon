@@ -1,24 +1,19 @@
 Int j <) 1?
 Int a <) 1?
-println{"Digite quantos numeros primos quer saber:   "}?
+PRINTLN{"Digite quantos numeros primos quer saber:   "}?
 Int num?
-ler{#num}?
-while{ a <| num }[
-	if{j|=|1}[
-		println{"Numero "+ a + ": " + j}?
-		a...?
-	]i else [
-		Int ok <) 0?
-		Int teste? 
-		four{teste <) j? teste >> 0? teste,,,?}[
-			if{j%teste |=| 0}[
-				ok...?
-			]i
-		]f
-		if{ok|=|2}[
-			println{"Numero "+ a + ": " + j}?
-			a...?
-		]i
-	]e
-	j...?	
-]g
+DIZPRAMIM{#num}?
+GIRAGIRA{ a <| num }[
+	Int ok <) 0?
+	Int teste? 
+	VOOR{teste <) j? teste >> 0? teste--?}[
+		WENN{j%teste == 0}[
+			ok++?
+		]W
+	]V
+	WENN{ok==2}[
+		PRINTLN{"[ " + a + " ] Numero Primo :  " + j}?
+		a++?
+	]W
+	j++?	
+]G

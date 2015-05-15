@@ -26,8 +26,9 @@ class Interpretador {
 		for(int w =0; w < V.length; w++){
 			if(this.V[w] == null){// Acha o primeiro indice que não estaja ocupado.
 				if(l.startsWith("Int ")){// Se for a criação de um INT.
-					if(AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l)));// Pesquisa se a variavel ja existe, caso ja tenha uma com o mesmo nome ele subscreve ela.
-					else V[w] = new Inteiro(Pegar_Nome(l),Pegar_Valor(l));
+					if(AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l)));
+					// Pesquisa se a variavel ja existe, caso ja tenha uma com o mesmo nome ele subscreve ela.
+					else V[w] = new Inteiro(Pegar_Nome(l),Pegar_Valor(l));// Se ela não existe ela entra nesse Else.
 					break;
 				} else if(l.startsWith("Double ")){// Se for a criação de um DOUBLE.
 					if(AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l)));
@@ -43,28 +44,16 @@ class Interpretador {
 	}
 	
 	public void corrige(String l[]){ //corrige o problema de espaços e tabs desnecessarios
-		String linhas_corrigidas[];
-		String [] frase; //frase é um vetor por que se a linha tiver "(aspas) ela vai ser quebrada em 3 partes.
-		linhas_corrigidas = l;
-		String Nlinha = new String();
-		LogErro log = new LogErro();
-		int x = 0; //x vai percorrer o programa...
-		for(int i = 0; i < linhas_corrigidas.length; i++){
-			if(linhas_corrigidas[i] != null){
-				if(linhas_corrigidas[i].contains("\"") && linhas_corrigidas[i].contains("<)")){ //excluir espaços duplicados FORA da string
-					frase = linhas_corrigidas[i].split("\""); //quebra a string em uma nova parte toda vez que achar " (aspas)									
-					frase[0] = frase[0].replaceAll("\\s+"," ");  //substitui multiplos espaços por apenas 1 espaço.(antes das aspas)
-					frase[2] = frase[2].replaceAll("\\s+"," ");	 //substitui multiplos espaços por apenas 1 espaço.(depois das aspas)
-					frase[0] = frase[0].concat(frase[1]).concat(frase[2]); //junta a string novamente, a string dentro das " ficou intacta.
-				}
-				linhas_corrigidas[i] = linhas_corrigidas[i].trim();	//exclui tabs antes e depois da linha.
-				if(!(linhas_corrigidas[i].startsWith("print"))){  //excluir espaço duplicado da linha toda.(se ela nao for um print!)
-					linhas_corrigidas[i] = linhas_corrigidas[i].replaceAll("\\s+"," ");	//mesma funçao ali de cima, agora com a linha toda.			
-				}
+		this.linhas = l;
+		for(int posicao = 0; posicao < linhas.length; posicao++) {
+			if(linhas[posicao] != null) {
+				linhas[posicao] = l[posicao].replaceAll("\t", "");
+				if(linhas[posicao].startsWith("String ") || linhas[posicao].startsWith("PRINTLN") || linhas[posicao].startsWith("PRINT"));
+				else linhas[posicao] = linhas[posicao].replaceAll("\\s+"," ");
 			}
 		}
-		if(log.VerificaErros(linhas_corrigidas)) 
-		interpreta(linhas_corrigidas);
+		LogErro log = new LogErro();
+		if(log.VerificaErros(linhas)) interpreta();
 	}
 	
 	public int ControleDeLinha(int posicao){
@@ -72,9 +61,9 @@ class Interpretador {
 			posicao = Condicao.ExecutaIF(posicao);
 		} else if ( linhas[posicao].startsWith("VOOR") ){//For. Vem da linguagem Holandesa.
 			posicao = Laco.ExecutaFor(posicao);
-		} else if ( linhas[posicao].startsWith("GIRAGIRA") ){//While.
+		} else if ( linhas[posicao].startsWith("GIRAGIRA") ){//While. Vem da linguagem HUE.
 			posicao = Laco.ExecutaWHILE(posicao);
-		} else if ( linhas[posicao].startsWith("DIZPRAMIM") ){//Scanf.
+		} else if ( linhas[posicao].startsWith("DIZPRAMIM") ){//Scanf. Vem da linguagem HUE.
 			Comandos.ExecutaSCANF(linhas[posicao]);
 		} else if ( linhas[posicao].startsWith("PRINT") || linhas[posicao].startsWith("PRINTLN") ){//Print.
 			Comandos.ExecutaPRINT(linhas[posicao]);
@@ -105,12 +94,12 @@ class Interpretador {
 	public void Darkside(String l){
 		if(l.contains(",")){// Quando quiser imprimir variaveis especificas.
 			l = l.replaceAll("DARKSIDE", "");// Retira a palavra.
-			l = l.replaceAll("[ \\{\\}\\?]", "");// Retira esses caracateres.
-			String[] Nomes = l.split(",");
-			for(int w = 0; w < Nomes.length; w++){
-				for(int a = 0; a < V.length; a++){
+			l = l.replaceAll("[ \\{\\}\\?]", "");// Retira esses caracteres.
+			String[] Nomes = l.split(",");//Quebras os indices nas virgulas encontradas.
+			for(int w = 0; w < Nomes.length; w++){// Anda pelo vetor de nomes.
+				for(int a = 0; a < V.length; a++){// Anda pelo vetor de variaveis criadas pelo usuario.
 					if(V[a] != null){
-						if(V[a].nome.equals(Nomes[w])){
+						if(V[a].nome.equals(Nomes[w])){// Confere os nomes.
 							System.out.println("[ " + a + " ] Nome Variavel : " + V[a].nome); 
 							System.out.println("      Conteudo : " +  V[a].valor);
 							System.out.println();
@@ -119,7 +108,7 @@ class Interpretador {
 				}
 			}
 		} else {
-			for(int w = 0; w < V.length; w++){
+			for(int w = 0; w < V.length; w++){// Anda pelo vetor de variaveis criadas pelo usuario.
 				if (V[w] != null){
 					System.out.println("[ " + w + " ] Nome Variavel : " + V[w].nome); 
 					System.out.println("      Conteudo : " +  V[w].valor);
@@ -130,17 +119,17 @@ class Interpretador {
 	}
 	
 	public void MaisMais_E_MenosMenos(String l){
-		int Somar = 1;
-		if(l.contains("--")) Somar = (-1);
-		String Nome = l.replaceAll("[ \\+\\-\\?]", "");
-		for(int w = 0; w < V.length; w++){
+		int Somar = 1;// Caso seja Mais_Mais.
+		if(l.contains("--")) Somar = (-1);// Caso seja Menos_Menos.
+		String Nome = l.replaceAll("[ \\+\\-\\?]", "");// Tira esse caracteres. 
+		for(int w = 0; w < V.length; w++){ // Anda pelo vetor de variaveis criadas pelo usuario.
 			if(V[w] != null){
-				if(V[w].nome.equals(Nome)){
+				if(V[w].nome.equals(Nome)){// Se o Nome passado pelo usuario, for igual ao que tem na variaveis criadas entra nesse if.
 					if(V[w] instanceof Doublee){
-						double valor = (double) V[w].valor;
-						V[w].valor = valor + Somar;
+						double valor = (double) V[w].valor;// Como é Object não posso somar diretamente, então transformo em Double.
+						V[w].valor = valor + Somar;// Soma o valor que tinha mais com Somar, que varia se for Menos_Menos somar é -1.
 					} else if(V[w] instanceof Inteiro){
-						int valor = (int) V[w].valor;						
+						int valor = (int) V[w].valor;// Como é Object não posso somar diretamente, então transformo em Int.						
 						V[w].valor = valor + Somar;
 					}					
 				}
@@ -166,10 +155,10 @@ class Interpretador {
 		AlteraVariavel(Pegar_Nome(l),Pegar_Valor(l));
 	}
 	
-	public boolean AlteraVariavel(String Nome, String Valor){
-		for(int w = 0; w < V.length; w++){
-			if(V[w] != null){
-				if(V[w].nome.equals(Nome)){
+	public boolean AlteraVariavel(String Nome, String Valor){// Esse metodo é do tipo boolean, pois ele é usado também na criação
+		for(int w = 0; w < V.length; w++){ //                   de variaveis para ver se já existe uma variavel com aquele nome e se
+			if(V[w] != null){//									caso existir uma variavel com aquele nome ela será subscrevida. Mas esse
+				if(V[w].nome.equals(Nome)){//					é também utilizado para alteração no valor da variavel.
 					if(V[w] instanceof Doublee){
 						V[w].valor = Double.valueOf(Valor).doubleValue();
 					} else if(V[w] instanceof Inteiro){
@@ -177,30 +166,30 @@ class Interpretador {
 					} else if(V[w] instanceof Stringg){
 						V[w].valor += Valor;
 					}
-					return true;
+					return true;// Significa que a variavel ja existe e foi subscrevida.
 				}
 			}
 		}
 		return false;
 	}
 	
-	public String LocalizarVariavel(String Nome){
-		for(int w = 0; w < V.length; w++){
+	public String LocalizarVariavel(String Nome){// Utilizado principalmente em expressões aritmerica com variaveis que precisa
+		for(int w = 0; w < V.length; w++){ //       do valor da variavel.
 			if(V[w] != null){
 				if(V[w].nome.equals(Nome)){
-					return String.valueOf(V[w].valor);
+					return String.valueOf(V[w].valor);// Retorna o valor da variavel.
 				}
 			}
 		}
-		return Nome;
+		return Nome;// Se não encontra retorna oque foi passado, porque pode ser um numero.
 	}
 	
 	public String Pegar_ValorString(String l){
 		int x = 0;
 		String Valor = "";
 		while(l.charAt(x) != '"') x++;
-		x++;
-		while(l.charAt(x) != '"'){
+		x++;// Vale o proximo caracter da aspas.
+		while(l.charAt(x) != '"'){// Copia até achar as aspas.
 			Valor += l.charAt(x);
 			x++;
 		}
@@ -210,16 +199,17 @@ class Interpretador {
 	public String Pegar_Nome(String l){
 		int a = 0;
 		if(l.startsWith("Int ") || l.startsWith("String ") || l.startsWith("Double ")) a = 1;
-		l = l.replaceAll("[\\<\\)\\?]", " ");
+		// Caso for na declaração de variavel o nome vai se encontrar no indice 1 do vetor, pois no split é mandado quebrar
+		// nos espaços.
+		l = l.replaceAll("[\\<\\)\\?]", " ");// Retira esses caracteres.
 		String[] vet = l.split(" ");
 		return vet[a];
 	}
 	
-     public void interpreta(String l[]) {
-		 this.linhas = l;
+     public void interpreta() {
 		for(int posicao = 0; posicao < linhas.length; posicao++) {
             if(linhas[posicao] != null) {			
-				posicao = ControleDeLinha(posicao);				
+				posicao = ControleDeLinha(posicao);// Confere oque tem na linha e chama os metodos necessarios nessa linha.		
 			}
 		}
 	}

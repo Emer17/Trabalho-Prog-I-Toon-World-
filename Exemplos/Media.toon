@@ -2,7 +2,7 @@ Int oque?
 Double resul?
 Int Total?
 GIRAGIRA { oque |= 100 }[
-	resul <) resul + num ?
+	resul <) resul + oque ?
 	PRINTLN {"Digite um numero :"}?
 	DIZPRAMIM { #oque }?
 	WENN { oque |= 100 }[

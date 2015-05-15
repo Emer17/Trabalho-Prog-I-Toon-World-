@@ -6,13 +6,13 @@
  * 
  * Esta classe é responsavel por verificar ALGUNS erros na sintaxe do programa escrito.*/
  
- class LogErro{
+class LogErro{
 	 
 	 public boolean VerificaErros(String l[]){
 		 int x = 0,num = 0;
 		 while(x < l.length){
 			   if(l[x] != null && !l[x].isEmpty()){
-				 if(l[x].contains("while") || l[x].contains("four") || l[x].contains("if") || l[x].contains("else")){
+				 if(l[x].contains("GIRAGIRA") || l[x].contains("VOOR") || l[x].contains("WENN") || l[x].contains("SONST")){
 					if(!l[x].contains("[")){
 						System.out.println("ERRO: Falta '[' na linha " + (x+1));
 						return false;
@@ -22,24 +22,24 @@
 					if(l[x].contains("]")){
 						num--;
 					}
-					if(l[x].contains("four") && l[x].contains("..?") && !l[x].contains("...?") || l[x].contains("four") && l[x].contains(",,?") && !l[x].contains(",,,?")){
+					if(l[x].contains("VOOR") && l[x].contains("+?") && !l[x].contains("++?") || l[x].contains("VOOR") && l[x].contains("-?") && !l[x].contains("--?")){
 						System.out.println("ERRO: Comando de atribuiçao incorreto na linha " + (x+1));
 						return false;
 					}
-					if(!l[x].contains("else") && !l[x].contains("<<") && !l[x].contains(">>") && !l[x].contains("<|") && !l[x].contains(">|") && !l[x].contains("|=|") && !l[x].contains("=|=")){
+					if(!l[x].contains("SONST") && !l[x].contains("<<") && !l[x].contains(">>") && !l[x].contains("<|") && !l[x].contains(">|") && !l[x].contains("==") && !l[x].contains("|=")){
 						System.out.println("ERRO: Falta simbolo de verificaçao na linha " + (x+1));
 						return false;
 					}
-					if(!l[x].contains("else") && !l[x].contains("{") || !l[x].contains("else") && !l[x].contains("}")){
+					if(!l[x].contains("SONST") && !l[x].contains("{") || !l[x].contains("SONST") && !l[x].contains("}")){
 						System.out.println("ERRO: Falta simbolo de inicio/fim de expressão na linha " + (x+1));
 						return false;
 					}
-				}else if(l[x].contains("print")){
+				}else if(l[x].contains("PRINT") || l[x].contains("DIZPRAMIM")){
 					if(!l[x].contains("{") || !l[x].contains("}")){
 						System.out.println("ERRO: Falta simbolo de inicio/fim de expressão na linha " + (x+1));
 						return false;
 					}
-				}else if(l[x].contains("..?") && !l[x].contains("...?") || l[x].contains(",,?") && !l[x].contains(",,,?")){
+				}else if(l[x].contains("+?") && !l[x].contains("++?") || l[x].contains("-?") && !l[x].contains("--?")){
 						System.out.println("ERRO: Comando de atribuiçao incorreto na linha " + (x+1));
 						return false;
 				}else if(l[x].contains("]")){

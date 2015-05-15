@@ -15,30 +15,28 @@ class Comandos{
 	}
 	
 	public void ExecutaPRINT(String l){
-		int x = 0;
-		while(l.charAt(x) != '{') x++;
-		x++;
-		if(l.startsWith("PRINTLN")) System.out.println(ConcatenarFrases(l,x,""));
-		else System.out.print(ConcatenarFrases(l,x,""));
+		if(l.startsWith("PRINTLN")){ 
+			l = l.replaceAll("PRINTLN", "");
+			System.out.println(ConcatenarFrases(l));
+		} else {
+			l = l.replaceAll("PRINT", "");
+			System.out.print(ConcatenarFrases(l));
+		}
 	}
 	
-	public String ConcatenarFrases(String l,int x, String ImprimirLinha){
-		String Conteudo = "";
-		boolean aspas = false;
-		if(l.charAt(x) == '"'){
-			aspas = true;
-			x++;
+	public String ConcatenarFrases(String l){
+		String ImprimirLinha = "";
+		l = l.replaceAll("[\\{\\}\\?]", "");// Retira esses caracteres.
+		String[] Imprimir = l.split("\\+");//Quebras os indices nos mais encontradas.
+		for(int w = 0; w < Imprimir.length; w++){// Anda pelo vetor de nomes.
+			if(!Imprimir[w].contains("\"")){
+				Imprimir[w] = Imprimir[w].replaceAll(" ", "");
+				Imprimir[w] = Inter.LocalizarVariavel(Imprimir[w]);
+			} else {
+				Imprimir[w] = Imprimir[w].replaceAll("\"", "");
+			}
+			ImprimirLinha += Imprimir[w];
 		}
-		while(l.charAt(x) != '}'){
-			if(l.charAt(x) == '+') break;
-			else if(l.charAt(x) == '"');
-			else if(l.charAt(x) == ' '){
-				if(aspas) Conteudo += " ";
-			} else Conteudo += l.charAt(x);
-			x++;
-		}
-		ImprimirLinha += Inter.LocalizarVariavel(Conteudo);
-		if(l.charAt(x) == '+') ImprimirLinha = ConcatenarFrases(l,x+1,ImprimirLinha);
 		return ImprimirLinha;
 	}
 	
