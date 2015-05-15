@@ -16,6 +16,10 @@ class Toon {
         Scanner s;
         Interpretador b;
         String linhas[] = new String[2000];
+        if (!(args[0].endsWith(".toon"))){ //verifica se o arquivo passado tem a extensão .toon
+			System.out.println ("Erro: Arquivo desconhecido. Favor insira um formato correto");
+			return;
+		} 
         f = new File(args[0]);
         s = new Scanner(f);
         b = new Interpretador();

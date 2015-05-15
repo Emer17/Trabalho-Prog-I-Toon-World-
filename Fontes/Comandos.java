@@ -40,7 +40,7 @@ class Comandos{
 		return ImprimirLinha;
 	}
 	
-	public void ExecutaSCANF(String l){//ler(#NomeVariavel)
+	public void ExecutaSCANF(String l){
 		int x = 0;
 		String Nome = "";
 		Scanner scanner = new Scanner(System.in);
